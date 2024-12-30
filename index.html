@@ -5,62 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rohit Krishnan's Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Rohit Krishnan</h1>
-        <p>Welcome to my portfolio! I am a Computer Science and Engineering student passionate about development and problem-solving.</p>
-    </header>
     <nav>
-        <a href="#about">About Me</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
-    </nav>
-    <div class="container">
-        <section id="about" class="about fade-in">
-            <h2>About Me</h2>
-            <p>Bachelor of Technology in Computer Science and Engineering, Amrita Vishwa Vidyapeetham (2021-2025).</p>
-            <p>Actively contributing to open-source projects, including the Linux Kernel. Experienced in creating impactful web and machine learning applications.</p>
-            <a href="resume.pdf" download class="button">Download My Resume</a>
-        </section>
-        <section id="projects" class="projects fade-in">
-            <h2>Projects</h2>
-            <ul>
-                <li><strong>YouTube Playlist Duration Calculator</strong> (Python, Flask, YouTube Data API v3) - A web app to calculate total playlist duration.</li>
-                <li><strong>PrepGenius</strong> (React, GCP) - A higher education helper platform deployed on Google Cloud Platform.</li>
-                <li><strong>PPE Detection using YOLOv8</strong> - Segmentation model for identifying missing PPE kit equipment.</li>
-            </ul>
-        </section>
-        <section id="skills" class="skills fade-in">
-            <h2>Skills</h2>
-            <div class="skill-list">
-                <div class="skill-item">Python</div>
-                <div class="skill-item">Kotlin</div>
-                <div class="skill-item">Java</div>
-                <div class="skill-item">SQL (Postgres)</div>
-                <div class="skill-item">JavaScript</div>
-                <div class="skill-item">HTML/CSS</div>
-                <div class="skill-item">React</div>
-                <div class="skill-item">Flask</div>
-                <div class="skill-item">YOLOv8</div>
-                <div class="skill-item">Google Cloud Platform</div>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects_and_skills.html">Projects & Skills</a>
+                <a href="contact.html">Contact</a>
             </div>
+            <button class="theme-switch" onclick="rotateTheme()">☀️ Light</button>
+        </div>
+    </nav>
+    
+    <header class="fade-in">
+        <h1>Rohit Krishnan</h1>
+        <p>Computer Science Engineering Student & Open Source Contributor</p>
+        <p class="subtitle">Building the future, one commit at a time.</p>
+    </header>
+
+    <main class="container">
+        <section class="section fade-in">
+            <h2>Welcome to my portfolio</h2>
+            <p>I'm a passionate developer with a focus on open-source contributions and full-stack development. Currently pursuing my Bachelor's in Computer Science Engineering at Amrita Vishwa Vidyapeetham.</p>
+            <a href="about.html" class="button magnetic glow-effect">Learn More About Me</a>
         </section>
-        <section id="contact" class="contact fade-in">
-            <h2>Contact Me</h2>
-            <p>Feel free to reach out to me via email or check out my work on GitHub and LinkedIn.</p>
-            <ul>
-                <li>Email: <a href="mailto:rohitkrishnanofficial@gmail.com">rohitkrishnanofficial@gmail.com</a></li>
-                <li>LinkedIn: <a href="https://linkedin.com/in/rohit-krishnan-633a43250/" target="_blank">linkedin.com/in/rohit-krishnan</a></li>
-                <li>GitHub: <a href="https://github.com/LordNydorf" target="_blank">github.com/LordNydorf</a></li>
-                <li>LeetCode: <a href="https://leetcode.com/u/LordNydorf/" target="_blank">leetcode.com/u/LordNydorf</a></li>
-            </ul>
-        </section>
-    </div>
+    </main>
+
     <footer>
         <p>&copy; 2024 Rohit Krishnan. All Rights Reserved.</p>
     </footer>
+    
     <script src="script.js"></script>
+    <div class="cursor-dot"></div>
+    <div class="custom-cursor"></div>
+    <script src="cursor-effects.js"></script>
+    <script src="background-effects.js"></script>
+
 </body>
 </html>
