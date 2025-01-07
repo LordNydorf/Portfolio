@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav>
@@ -18,7 +18,7 @@
                 <a href="projects_and_skills.html">Projects & Skills</a>
                 <a href="contact.html">Contact</a>
             </div>
-            <button class="theme-switch" onclick="rotateTheme()">☀️ Light</button>
+            <button class="theme-switch pixel-borders" onclick="rotateTheme()">[☀️]</button>
         </div>
     </nav>
 
@@ -28,46 +28,104 @@
     </header>
 
     <main class="container">
-        <section class="section fade-in">
+        <section class="section pixel-borders fade-in">
             <h2>Projects</h2>
             <div class="projects-grid">
-                <div class="project-card magnetic glow-effect">
-                    <h3>YouTube Playlist Duration Calculator</h3>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/LordNydorf/YTplaylistCalc" target="_blank">YouTube Playlist Duration Calculator</a></h3>
                     <p>Python, Flask, YouTube Data API v3</p>
                 </div>
-                <div class="project-card magnetic glow-effect">
-                    <h3>PrepGenius</h3>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/LordNydorf/Tic-Tac-Toe" target="_blank">Tic-Tac-Toe</a></h3>
+                    <p>Kotlin</p>
+                </div>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/LordNydorf/Hangman" target="_blank">Hangman</a></h3>
+                    <p>Kotlin</p>
+                </div>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/Vamship113/FocusPad" target="_blank">FocusPad</a></h3>
+                    <p>Angular, SpringBoot</p>
+                </div>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/duckcommit/Report-Card-Generator" target="_blank">Report-Card-Generator</a></h3>
+                    <p>Python, Tkinter</p>
+                </div>
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/LordNydorf/PrepGenius" target="_blank">PrepGenius</a></h3>
                     <p>React, GCP</p>
                 </div>
-                <div class="project-card magnetic glow-effect">
+                <div class="project-card pixel-borders glow-effect">
+                    <h3><a href="https://github.com/LordNydorf/LeetCode" target="_blank">LeetCode</a></h3>
+                    <p>Python, SQL, JavaScript</p>
+                </div>
+                <div class="project-card pixel-borders glow-effect">
                     <h3>PPE Detection using YOLOv8</h3>
                     <p>Computer Vision, Machine Learning</p>
                 </div>
             </div>
         </section>
 
-        <section class="section fade-in">
+        <section class="section pixel-borders fade-in">
             <h2>Skills</h2>
             <div class="skill-list">
-                <div class="skill-item">Python</div>
-                <div class="skill-item">Kotlin</div>
-                <div class="skill-item">Java</div>
-                <div class="skill-item">SQL</div>
-                <div class="skill-item">React</div>
-                <div class="skill-item">Flask</div>
-                <div class="skill-item">Google Cloud Platform</div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/python.png" alt="Python" class="skill-">
+                    <span class="skill-name">Python</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/kotlin.png" alt="Kotlin" class="skill-">
+                    <span class="skill-name">Kotlin</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/java.png" alt="Java" class="skill-">
+                    <span class="skill-name">Java</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/postgressql.png" alt="SQL" class="skill-">
+                    <span class="skill-name">SQL</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/react.png" alt="React" class="skill-">
+                    <span class="skill-name">React</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/flask.png" alt="Flask" class="skill-">
+                    <span class="skill-name">Flask</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/gcp.png" alt="Google Cloud Platform" class="skill-">
+                <span class="skill-name">GCP</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/js.png" alt="JavaScript" class="skill-">
+                <span class="skill-name">JavaScript</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/bash.png" alt="Bash" class="skill-">
+                <span class="skill-name">Bash</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/linux.png" alt="Linux" class="skill-">
+                <span class="skill-name">Linux</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/html.png" alt="HTML" class="skill-">
+                <span class="skill-name">HTML</span>
+                </div>
+                <div class="skill-item pixel-borders">
+                    <img src="images/css.png" alt="CSS" class="skill-">
+                <span class="skill-name">CSS</span>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Rohit Krishnan. All Rights Reserved.</p>
+        <p>&copy; Rohit Krishnan. All Rights Reserved.</p>
     </footer>
 
     <script src="script.js"></script>
-    <div class="cursor-dot"></div>
-    <div class="custom-cursor"></div>
-    <script src="cursor-effects.js"></script>
     <script src="background-effects.js"></script>
 
 </body>
