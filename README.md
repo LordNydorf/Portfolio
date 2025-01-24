@@ -8,7 +8,7 @@ Welcome to my portfolio website! This site showcases my skills, projects, and pr
 - **Projects and Skills**: Explore the projects I have worked on, including detailed descriptions and links to GitHub repositories or live demos and an overview of the technologies, tools, and programming languages I am proficient in.
 - **Contact**: Get in touch with me via email or social media platforms.
 
-## Technology Stack
+## Tech Stack
 
 The portfolio is built with:
 
