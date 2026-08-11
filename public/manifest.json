@@ -1,0 +1,21 @@
+{
+  "name": "Rohit Krishnan — Portfolio",
+  "short_name": "Rohit Krishnan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070709",
+  "theme_color": "#ef4444",
+  "description": "Rohit Krishnan — Software Developer portfolio. About, work, experience and contact.",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
