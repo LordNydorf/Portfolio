@@ -212,5 +212,21 @@ export const resume: SiteConfig = {
             languages: ["Dart"],
             repoUrl: "https://github.com/LordNydorf/Pennora"
         },
+        {
+            title: "Prepgenius",
+            client: "Personal Project",
+            timeline: "2 weeks",
+            techStack: ["React", "Vite"],
+            images: ["/prepgenius/prepgenius.png"],
+            description: "PrepGenius is a competitive exam preparation and computer science learning web application. It provides study materials, video playlists, official solved question papers (CAT 2018–2023), and interactive practice quizzes for competitive exams such as CAT, GATE, GRE, GMAT, and IELTS.",
+            scope: "Web Development",
+            responsibilities: [
+                "Designing and developing the website's front-end.",
+                "Envisioning and designing a brand identity.",
+            ],
+            languages: ["HTML/CSS", "JavaScript", "React"],
+            repoUrl: "https://github.com/LordNydorf/PrepGenius",
+            demoUrl: "https://prepgenius-lordnydorf.netlify.app/"
+        },
     ],
 };
