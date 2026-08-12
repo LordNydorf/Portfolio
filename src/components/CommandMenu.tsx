@@ -17,9 +17,12 @@ import {
     Mail,
     ExternalLink,
     Box,
-    Copy
+    Copy,
+    Sun,
+    Moon
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/components/ThemeProvider";
 import { resume } from "@/data/resume";
 
 interface CommandMenuProps {
@@ -28,6 +31,7 @@ interface CommandMenuProps {
 
 export function CommandMenu({ onNavigate }: CommandMenuProps) {
     const [open, setOpen] = React.useState(false);
+    const { resolvedTheme, setTheme } = useTheme();
 
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -67,6 +71,29 @@ export function CommandMenu({ onNavigate }: CommandMenuProps) {
                 </CommandGroup>
                 <CommandSeparator />
 
+                <CommandGroup heading="Theme">
+                    <CommandItem
+                        value="toggle switch light dark theme mode"
+                        onSelect={() => runCommand(() => {
+                            const next = resolvedTheme === "dark" ? "light" : "dark";
+                            setTheme(next);
+                            toast.success(`Switched to ${next} theme`);
+                        })}
+                    >
+                        {resolvedTheme === "dark" ? (
+                            <>
+                                <Sun className="mr-2 h-4 w-4 text-amber-500" /> Switch to Light Theme
+                            </>
+                        ) : (
+                            <>
+                                <Moon className="mr-2 h-4 w-4 text-amber-400" /> Switch to Dark Theme
+                            </>
+                        )}
+                        <CommandShortcut>⌘T</CommandShortcut>
+                    </CommandItem>
+                </CommandGroup>
+                <CommandSeparator />
+
                 <CommandGroup heading="Projects">
                     {resume.projects.map((project) => (
                         <CommandItem
@@ -95,4 +122,4 @@ export function CommandMenu({ onNavigate }: CommandMenuProps) {
             </CommandList>
         </CommandDialog>
     );
-}
+}

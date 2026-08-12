@@ -33,7 +33,10 @@ export default defineConfig(({ mode }) => {
 
     const metaDescription = `Professional portfolio of ${name}, ${article} ${role}. View my projects, skills, and contact information.`;
 
+    const base = mode === "development" ? "/" : (process.env.BASE_URL || "/Portfolio/");
+
     return {
+        base,
         server: {
             host: "::",
             port: 8080,

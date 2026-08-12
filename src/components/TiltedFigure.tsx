@@ -57,7 +57,7 @@ export function TiltedFigure({
     return (
         <div
             ref={figRef}
-            className="w-full max-w-[280px] md:max-w-[300px] aspect-[3/4] rounded-[1rem] overflow-hidden border-2 border-white/20 glass-card preserve-3d transform-gpu transition-transform duration-200 ease-out"
+            className="w-full max-w-[280px] md:max-w-[300px] aspect-[3/4] rounded-[1rem] overflow-hidden border-2 border-black/10 dark:border-white/20 glass-card preserve-3d transform-gpu transition-transform duration-200 ease-out"
             style={{
                 transform: "perspective(1000px) rotateX(0deg) rotateY(0deg)",
             }}

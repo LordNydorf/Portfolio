@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Layout } from "@/components/Layout";
 import { About } from "@/components/sections/About";
 import { Portfolio } from "@/components/sections/Portfolio";
@@ -42,13 +43,15 @@ const App = () => {
     };
 
     return (
-        <TooltipProvider>
-            <Sonner />
-            <Layout currentPage={currentPage} onNavigate={handleNavigate}>
-                {renderPage()}
-            </Layout>
-        </TooltipProvider>
+        <ThemeProvider defaultTheme="dark">
+            <TooltipProvider>
+                <Sonner />
+                <Layout currentPage={currentPage} onNavigate={handleNavigate}>
+                    {renderPage()}
+                </Layout>
+            </TooltipProvider>
+        </ThemeProvider>
     );
 };
 
-export default App;
+export default App;
