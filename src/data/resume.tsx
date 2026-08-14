@@ -228,5 +228,20 @@ export const resume: SiteConfig = {
             repoUrl: "https://github.com/LordNydorf/PrepGenius",
             demoUrl: "https://prepgenius-lordnydorf.netlify.app/"
         },
+        {
+            title: "Academia Pro",
+            client: "Personal Project",
+            timeline: "2 weeks",
+            techStack: ["Python", "CustomTkinter", "SQLite", "MySQL"],
+            images: ["/ap/ap.png"],
+            description: "Report Card Generator is a desktop application that generates report cards for students. It is built with Python and Flask on the backend, and HTML and CSS on the frontend.",
+            scope: "Desktop Application Development",
+            responsibilities: [
+                "Designing and developing the desktop application's front-end.",
+                "Enabling CSV Export and Excel Import.",
+            ],
+            languages: ["Python", "CustomTkinter", "SQLite", "MySQL"],
+            repoUrl: "https://github.com/duckcommit/Report-Card-Generator"
+        },
     ],
 };
