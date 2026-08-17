@@ -119,6 +119,54 @@ export const resume: SiteConfig = {
 
     projects: [
         {
+            title: "2do",
+            client: "Work Project",
+            timeline: "1 year, 3 months",
+            techStack: ["Flutter", "Dart", "Firebase", "Node.js"],
+            images: ["/2do/2do.png"],
+            description: "2do app is a user-facing services marketplace mobile application designed for booking home, auto, and lifestyle services. It connects users with nearby professionals for various services. Built on flutter for both iOS and Android.",
+            scope: "App Development",
+            responsibilities: [
+                "Leading development of cross-platform mobile application using Flutter.",
+                "Integrating backend services via REST APIs and ensuring smooth data flow.",
+                "Optimising application for performance, scalability, and user experience."
+            ],
+            languages: ["Dart"],
+            demoUrl: "https://play.google.com/store/apps/details?id=com.twodopros.userapp",
+        },
+        {
+            title: "2do Partners",
+            client: "Work Project",
+            timeline: "1 year, 3 months",
+            techStack: ["Flutter", "Dart", "Firebase", "Node.js"],
+            images: ["/2do/2dop.png"],
+            description: "2do Partners is a professional-facing services marketplace mobile application designed for professionals to receive and manage job requests. It connects professionals with users for home, auto, and lifestyle services. Built on flutter for both iOS and Android.",
+            scope: "App Development",
+            responsibilities: [
+                "Leading development of cross-platform mobile application using Flutter.",
+                "Integrating backend services via REST APIs and ensuring smooth data flow.",
+                "Optimising application for performance, scalability, and user experience."
+            ],
+            languages: ["Dart"],
+            demoUrl: "https://play.google.com/store/apps/details?id=com.twodopros.partnersapp",
+        },
+        {
+            title: "2do Pros",
+            client: "Work Project",
+            timeline: "1 year, 3 months",
+            techStack: ["React", "Vite", "GSAP"],
+            images: ["/2do/2dopros.png"],
+            description: "2do Pros is a services marketplace web application designed for users and professionals to connect and transact. It connects professionals with users for home, auto, and lifestyle services. Built on React and Vite.",
+            scope: "Web Development",
+            responsibilities: [
+                "Leading development of web application using React and Vite.",
+                "Integrating backend services via REST APIs and ensuring smooth data flow.",
+                "Optimising application for performance, scalability, and user experience."
+            ],
+            languages: ["JavaScript"],
+            demoUrl: "https://2dopros.com/",
+        },
+        {
             title: "ProofPic",
             client: "Personal Project",
             timeline: "Ongoing",
