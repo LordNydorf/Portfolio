@@ -72,10 +72,34 @@ export default {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
+                shine: {
+                    "0%": { backgroundPosition: "100% 50%" },
+                    "100%": { backgroundPosition: "-100% 50%" },
+                },
+                "border-beam": {
+                    "100%": { "offset-distance": "100%" },
+                },
+                "pulse-glow": {
+                    "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+                    "50%": { opacity: "0.8", transform: "scale(1.03)" },
+                },
+                marquee: {
+                    "0%": { transform: "translateX(0%)" },
+                    "100%": { transform: "translateX(-100%)" },
+                },
+                "marquee-reverse": {
+                    "0%": { transform: "translateX(-100%)" },
+                    "100%": { transform: "translateX(0%)" },
+                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                shine: "shine 5s linear infinite",
+                "border-beam": "border-beam 6s linear infinite",
+                "pulse-glow": "pulse-glow 4s ease-in-out infinite",
+                marquee: "marquee 35s linear infinite",
+                "marquee-reverse": "marquee-reverse 35s linear infinite",
             },
         },
     },

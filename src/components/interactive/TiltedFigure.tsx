@@ -1,17 +1,15 @@
-// src/components/TiltedFigure.tsx
+// src/components/interactive/TiltedFigure.tsx
 import { useEffect, useRef } from "react";
 
 export function TiltedFigure({
-                                 src,
-                                 alt,
-                             }: {
+    src,
+    alt,
+}: {
     src: string;
     alt: string;
 }) {
     const figRef = useRef<HTMLDivElement | null>(null);
     const rafRef = useRef<number | null>(null);
-
-    // FIX: Use useRef for mutable values that don't trigger re-renders
     const targetRef = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -29,12 +27,10 @@ export function TiltedFigure({
             const x = ((my / rect.height) - 0.5) * -8;
             const y = ((mx / rect.width) - 0.5) * 8;
 
-            // Update the Ref, not a local variable
             targetRef.current = { x, y };
 
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
             rafRef.current = requestAnimationFrame(() => {
-                // Read from the Ref
                 el.style.transform = `perspective(1000px) rotateX(${targetRef.current.x}deg) rotateY(${targetRef.current.y}deg)`;
             });
         };

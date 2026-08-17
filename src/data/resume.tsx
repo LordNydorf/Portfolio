@@ -5,7 +5,9 @@ import {
     Mail,
     Zap,
     Accessibility,
-    MessageSquareText,
+    Layers,
+    Cpu,
+    Compass,
 } from "lucide-react";
 import { SiteConfig } from "@/types";
 import { SVGProps } from "react";
@@ -52,21 +54,33 @@ export const resume: SiteConfig = {
     attributes: [
         {
             label: "Accessibility Focused",
-            description: "I build for everyone.",
+            description: "I build for everyone — high contrast, keyboard navigable, screen-reader friendly.",
             icon: Accessibility,
             color: "text-blue-400"
         },
         {
             label: "Performance First",
-            description: "I optimise for speed and efficiency.",
+            description: "I obsess over 60fps rendering, asset compression, and near-zero latency.",
             icon: Zap,
             color: "text-amber-400"
         },
         {
-            label: "Clear Communication",
-            description: "I'll give you jargon or plain English. Whichever you prefer.",
-            icon: MessageSquareText,
-            color: "text-emerald-400"
+            label: "Design Engineering",
+            description: "Bridging the gap between Figma and code with tactile physics and micro-animations.",
+            icon: Layers,
+            color: "text-rose-400"
+        },
+        {
+            label: "Systems & Clean Code",
+            description: "Modular, well-documented architecture that scales gracefully without technical debt.",
+            icon: Cpu,
+            color: "text-cyan-400"
+        },
+        {
+            label: "Continuous Exploration",
+            description: "Constantly prototyping with modern AI models, shaders, and novel frameworks.",
+            icon: Compass,
+            color: "text-purple-400"
         },
     ],
 

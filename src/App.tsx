@@ -1,53 +1,44 @@
 // src/App.tsx
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Layout } from "@/components/Layout";
-import { About } from "@/components/sections/About";
-import { Portfolio } from "@/components/sections/Portfolio";
-import { Experience } from "@/components/sections/Experience";
-import { Contact } from "@/components/sections/Contact";
+import { ThemeProvider } from "@/components/providers";
+import { Layout } from "@/components/layout";
+import { CustomCursor, NoiseOverlay } from "@/components/effects";
+import { About, Portfolio, Experience, Contact } from "@/components/sections";
 
 const App = () => {
-    const [currentPage, setCurrentPage] = useState<string>("about");
-
     useEffect(() => {
-        const getRoute = () => (location.hash.replace("#", "") || "about").toLowerCase();
-        const handleHashChange = () => {
-            setCurrentPage(getRoute());
-            window.scrollTo({ top: 0, behavior: "auto" });
-        };
-        handleHashChange();
-        window.addEventListener("hashchange", handleHashChange);
-        return () => window.removeEventListener("hashchange", handleHashChange);
+        const hash = location.hash.replace("#", "");
+        if (hash) {
+            setTimeout(() => {
+                const element = document.getElementById(hash);
+                if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                }
+            }, 300);
+        }
     }, []);
 
-    const handleNavigate = (page: string) => {
-        if (!document.startViewTransition) {
-            location.hash = page;
-            return;
-        }
-        document.startViewTransition(() => {
-            location.hash = page;
-        });
-    };
-
-    const renderPage = () => {
-        switch (currentPage) {
-            case "portfolio": return <Portfolio />;
-            case "experience": return <Experience />;
-            case "contact": return <Contact />;
-            default: return <About />;
+    const handleNavigate = (sectionId: string) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+            history.pushState(null, "", `#${sectionId}`);
         }
     };
 
     return (
         <ThemeProvider defaultTheme="dark">
             <TooltipProvider>
+                <CustomCursor />
+                <NoiseOverlay />
                 <Sonner />
-                <Layout currentPage={currentPage} onNavigate={handleNavigate}>
-                    {renderPage()}
+                <Layout currentPage="about" onNavigate={handleNavigate}>
+                    <About />
+                    <Portfolio />
+                    <Experience />
+                    <Contact />
                 </Layout>
             </TooltipProvider>
         </ThemeProvider>

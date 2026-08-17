@@ -4,8 +4,10 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from "@/compone
 import { Carousel, CarouselContent, CarouselItem, CarouselDots } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ProjectCard3D } from "@/components/interactive";
+import { Magnet, DecryptedText, BorderBeam } from "@/components/effects";
 import { languageHsl } from "@/lib/colours";
-import { ArrowUpRight, Github, Globe, X } from "lucide-react";
+import { ArrowUpRight, Github, Globe, X, Filter } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn, getAssetUrl } from "@/lib/utils";
@@ -47,7 +49,7 @@ function ProjectTextContent({ project }: { project: Project }) {
                 )}
                 {project.demoUrl && (
                     <a href={project.demoUrl} target="_blank" rel="noreferrer" className="flex-1">
-                        <Button className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-0"><Globe className="w-4 h-4" /> Live Demo</Button>
+                        <Button className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-0"><Globe className="w-4 h-4" />  Check it out </Button>
                     </a>
                 )}
             </div>
@@ -55,10 +57,30 @@ function ProjectTextContent({ project }: { project: Project }) {
     );
 }
 
+const CATEGORIES = ["All", "Web & Full-Stack", "Mobile Apps", "AI & Systems"] as const;
+type Category = typeof CATEGORIES[number];
+
 export function Portfolio() {
     const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [activeCategory, setActiveCategory] = useState<Category>("All");
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
     const isMobile = useIsMobile();
     const projects = resume.projects;
+
+    const filteredProjects = useMemo(() => {
+        if (activeCategory === "All") return projects;
+        if (activeCategory === "Mobile Apps") {
+            return projects.filter(p => p.techStack.some(t => ["Flutter", "Dart", "Android", "iOS"].includes(t)) || p.languages.some(l => ["Dart", "Flutter"].includes(l)));
+        }
+        if (activeCategory === "AI & Systems") {
+            return projects.filter(p => p.techStack.some(t => ["Python", "FastAPI", "TensorFlow", "Gemini", "LLaMA", "AI", "ML"].includes(t)) || p.languages.some(l => ["Python", "FastAPI"].includes(l)));
+        }
+        if (activeCategory === "Web & Full-Stack") {
+            return projects.filter(p => p.techStack.some(t => ["React", "TypeScript", "Node.js", "Web", "Next.js", "Tailwind"].includes(t)) || p.languages.some(l => ["React", "TypeScript", "JavaScript", "HTML/CSS"].includes(l)));
+        }
+        return projects;
+    }, [projects, activeCategory]);
+
     const selectedProject = projects.find(p => p.title === selectedId);
 
     // Detect Firefox to disable layoutId animations because Gecko struggles with them
@@ -90,75 +112,152 @@ export function Portfolio() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
+    const handleSelectCategory = (cat: Category) => {
+        setActiveCategory(cat);
+    };
+
+    const handleCardClick = (title: string) => {
+        setSelectedId(title);
+    };
+
     return (
-        <div className="pb-8 relative">
-            <header className="flex flex-col gap-2 mb-8 border-b border-black/10 dark:border-white/10 pb-6 animate-fade-up">
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-neutral-950 to-neutral-700 dark:from-white dark:to-white/60 bg-clip-text text-transparent">Portfolio</h2>
-                <p className="text-muted-foreground text-lg">A collection of {projects.length} projects exploring web, mobile, systems, and design.</p>
+        <section id="portfolio" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 relative">
+            <header className="flex flex-col gap-4 mb-10 border-b border-black/10 dark:border-white/10 pb-6 animate-fade-up">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                            <DecryptedText text="Featured Works" speed={35} />
+                        </h2>
+                    </div>
+
+                    {/* Interactive Filter Bar */}
+                    <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 relative overflow-x-auto hide-scrollbar self-start md:self-auto">
+                        <Filter className="w-3.5 h-3.5 ml-2 mr-1 text-muted-foreground shrink-0 hidden sm:inline-block" />
+                        {CATEGORIES.map((cat) => {
+                            const isActive = activeCategory === cat;
+                            return (
+                                <button
+                                    key={cat}
+                                    onClick={() => handleSelectCategory(cat)}
+                                    className={cn(
+                                        "relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap z-10",
+                                        isActive ? "text-primary dark:text-white font-semibold" : "text-muted-foreground hover:text-foreground"
+                                    )}
+                                >
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="projectFilterPill"
+                                            className="absolute inset-0 bg-white dark:bg-white/10 rounded-lg shadow-sm border border-black/5 dark:border-white/10 -z-10"
+                                            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                                        />
+                                    )}
+                                    {cat}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+                <p className="text-muted-foreground text-base">Showing {filteredProjects.length} of {projects.length} featured engineering projects.</p>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.map((project, idx) => (
-                    <article key={project.title} className="glass-card rounded-[1.25rem] group flex flex-col animate-fade-up overflow-hidden" style={{ animationDelay: `${idx * 100}ms` }}>
-                        <div className="relative aspect-video overflow-hidden border-b border-black/5 dark:border-white/5 bg-black/[0.04] dark:bg-black/30 cursor-pointer flex items-center justify-center" onClick={() => setSelectedId(project.title)}>
-                            {/* Ambient blurred backdrop for seamless edge-to-edge glow */}
-                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                <img
-                                    src={getAssetUrl(project.images[0])}
-                                    alt=""
-                                    aria-hidden="true"
-                                    className="w-full h-full object-cover blur-2xl scale-125 opacity-30 dark:opacity-40 select-none"
-                                />
-                                <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
-                            </div>
-
-                            {/* Clean, fully-contained foreground image that never gets cropped */}
-                            <div className="relative z-10 w-full h-full p-4 sm:p-5 flex items-center justify-center">
-                                {!isMobile ? (
-                                    <motion.img
-                                        layoutId={isFirefox ? undefined : `img-${project.title}`}
-                                        src={getAssetUrl(project.images[0])}
-                                        alt={project.title}
-                                        className={cn(
-                                            "max-w-full max-h-full object-contain rounded-lg drop-shadow-md select-none",
-                                            selectedId === project.title ? "opacity-0" : "opacity-100"
-                                        )}
-                                        whileHover={{ scale: 1.05 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                ) : (
-                                    <img
-                                        src={getAssetUrl(project.images[0])}
-                                        alt={project.title}
-                                        className="max-w-full max-h-full object-contain rounded-lg drop-shadow-md transition-transform duration-500 ease-out group-hover:scale-105 select-none"
-                                    />
+            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <AnimatePresence>
+                    {filteredProjects.map((project, idx) => (
+                        <motion.div
+                            key={project.title}
+                            layout
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            <ProjectCard3D
+                                onMouseEnter={() => setHoveredCard(project.title)}
+                                onMouseLeave={() => setHoveredCard(null)}
+                                data-cursor="view"
+                                data-cursor-text="VIEW ↗"
+                                className="group flex flex-col h-full relative"
+                                style={{ animationDelay: `${idx * 80}ms` }}
+                            >
+                                {hoveredCard === project.title && (
+                                    <BorderBeam size={180} duration={6} borderWidth={1.5} colorFrom="hsl(var(--primary))" colorTo="#ffffff" />
                                 )}
-                            </div>
 
-                            {/* Tech stack badges */}
-                            <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap gap-1.5 pointer-events-none">
-                                {project.techStack.slice(0, 3).map((tech) => (
-                                    <div key={tech} className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-md bg-black/75 dark:bg-black/85 backdrop-blur-md border border-white/10 text-white/90 shadow-sm">{tech}</div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="p-5 flex flex-col flex-1">
-                            <div className="flex justify-between items-start gap-2 mb-2">
-                                <h3 className="text-xl font-semibold tracking-tight group-hover:text-primary transition-colors text-foreground">{project.title}</h3>
-                                <Badge variant="outline" className="border-black/10 dark:border-white/10 text-xs font-normal text-muted-foreground bg-black/[0.03] dark:bg-white/5">{project.client}</Badge>
-                            </div>
-                            <p className="text-muted-foreground text-sm line-clamp-2 mb-5 leading-relaxed">{project.description}</p>
-                            <div className="mt-auto flex items-center gap-3 pt-4 border-t border-black/5 dark:border-white/5">
-                                <Button variant="secondary" size="sm" className="flex-1 bg-black/5 hover:bg-black/10 text-foreground dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border-0 transition-colors" onClick={() => setSelectedId(project.title)}>Read More</Button>
-                                <div className="flex gap-1">
-                                    {project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noreferrer" className="p-2 text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"><Github className="w-5 h-5" /></a>}
-                                    {project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer" className="p-2 text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"><ArrowUpRight className="w-5 h-5" /></a>}
+                                <div className="relative aspect-video overflow-hidden border-b border-black/5 dark:border-white/5 bg-black/[0.04] dark:bg-black/30 cursor-pointer flex items-center justify-center" data-cursor="view" data-cursor-text="VIEW ↗" onClick={() => handleCardClick(project.title)}>
+                                    {/* Ambient blurred backdrop for seamless edge-to-edge glow */}
+                                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                        <img
+                                            src={getAssetUrl(project.images[0])}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className="w-full h-full object-cover blur-2xl scale-125 opacity-30 dark:opacity-40 select-none"
+                                        />
+                                        <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
+                                    </div>
+
+                                    {/* Clean, fully-contained foreground image that never gets cropped */}
+                                    <div className="relative z-10 w-full h-full p-4 sm:p-6 flex items-center justify-center">
+                                        {!isMobile ? (
+                                            <motion.img
+                                                layoutId={isFirefox ? undefined : `img-${project.title}`}
+                                                src={getAssetUrl(project.images[0])}
+                                                alt={project.title}
+                                                className={cn(
+                                                    "max-w-full max-h-full object-contain rounded-xl drop-shadow-md select-none",
+                                                    selectedId === project.title ? "opacity-0" : "opacity-100"
+                                                )}
+                                                whileHover={{ scale: 1.04 }}
+                                                transition={{ duration: 0.3 }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={getAssetUrl(project.images[0])}
+                                                alt={project.title}
+                                                className="max-w-full max-h-full object-contain rounded-xl drop-shadow-md transition-transform duration-500 ease-out group-hover:scale-104 select-none"
+                                            />
+                                        )}
+                                    </div>
+
+                                    {/* Tech stack badges */}
+                                    <div className="absolute bottom-3.5 left-3.5 right-3.5 z-20 flex flex-wrap gap-1.5 pointer-events-none">
+                                        {project.techStack.slice(0, 3).map((tech) => (
+                                            <div key={tech} className="px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-lg bg-black/80 dark:bg-black/90 backdrop-blur-md border border-white/10 text-white/90 shadow-sm">{tech}</div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </article>
-                ))}
-            </div>
+                                <div className="p-6 flex flex-col flex-1 bg-card/20 dark:bg-[#0c0c0e]/30">
+                                    <div className="flex justify-between items-start gap-2 mb-2">
+                                        <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors text-foreground">
+                                            <DecryptedText text={project.title} speed={25} animateOn="hover" />
+                                        </h3>
+                                        <Badge variant="outline" className="border-black/10 dark:border-white/10 text-xs font-medium text-muted-foreground bg-black/[0.03] dark:bg-white/5">{project.client}</Badge>
+                                    </div>
+                                    <p className="text-muted-foreground text-sm line-clamp-2 mb-6 leading-relaxed">{project.description}</p>
+                                    <div className="mt-auto flex items-center gap-3 pt-4 border-t border-black/5 dark:border-white/5">
+                                        <Button variant="secondary" size="sm" className="flex-1 bg-black/5 hover:bg-black/10 text-foreground dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border-0 transition-all font-semibold rounded-xl" onClick={() => handleCardClick(project.title)}>Read More</Button>
+                                        <div className="flex gap-1.5 items-center">
+                                            {project.repoUrl && (
+                                                <Magnet padding={20} magnetStrength={3}>
+                                                    <a href={project.repoUrl} target="_blank" rel="noreferrer" className="p-2 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors border border-black/5 dark:border-white/10 block" aria-label={`View code for ${project.title}`}>
+                                                        <Github className="w-4 h-4" />
+                                                    </a>
+                                                </Magnet>
+                                            )}
+                                            {project.demoUrl && (
+                                                <Magnet padding={20} magnetStrength={3}>
+                                                    <a href={project.demoUrl} target="_blank" rel="noreferrer" className="p-2 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors border border-black/5 dark:border-white/10 block" aria-label={`View live site for ${project.title}`}>
+                                                        <ArrowUpRight className="w-4 h-4" />
+                                                    </a>
+                                                </Magnet>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </ProjectCard3D>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </motion.div>
 
             <AnimatePresence>
                 {selectedId && selectedProject && !isMobile && (
@@ -241,6 +340,6 @@ export function Portfolio() {
                     </DrawerContent>
                 </Drawer>
             )}
-        </div>
+        </section>
     );
 }
