@@ -1,5 +1,5 @@
 // src/components/layout/PullCordTheme.tsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/components/providers";
 import { Zap, Sun, Moon } from "lucide-react";
@@ -28,6 +28,7 @@ export function PullCordTheme() {
     const [quote, setQuote] = useState<string | null>(null);
     const [flash, setFlash] = useState(false);
 
+    const startYRef = useRef<number>(0);
     const pullY = useMotionValue(0);
     const springY = useSpring(pullY, { stiffness: 450, damping: 18, mass: 0.6 });
 
@@ -55,17 +56,18 @@ export function PullCordTheme() {
         }, 3200);
     }, [isDark, setTheme]);
 
-    const handleMouseDown = () => {
+    const handleStart = (clientY: number) => {
         setIsPulling(true);
+        startYRef.current = clientY;
     };
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
+    const handleMove = useCallback((clientY: number) => {
         if (!isPulling) return;
-        const delta = Math.max(0, Math.min(75, e.movementY * 2 + pullY.get()));
+        const delta = Math.max(0, Math.min(80, clientY - startYRef.current));
         pullY.set(delta);
     }, [isPulling, pullY]);
 
-    const handleMouseUp = useCallback(() => {
+    const handleEnd = useCallback(() => {
         if (!isPulling) return;
         setIsPulling(false);
 
@@ -76,16 +78,51 @@ export function PullCordTheme() {
         pullY.set(0);
     }, [isPulling, pullY, triggerSwitch]);
 
-    useEffect(() => {
-        if (isPulling) {
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("mouseup", handleMouseUp);
+    // Mouse event handlers
+    const onMouseDown = (e: React.MouseEvent) => {
+        handleStart(e.clientY);
+    };
+
+    // Touch event handlers for mobile touchscreens
+    const onTouchStart = (e: React.TouchEvent) => {
+        if (e.touches.length > 0) {
+            handleStart(e.touches[0].clientY);
         }
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    useEffect(() => {
+        if (!isPulling) return;
+
+        const onMouseMove = (e: MouseEvent) => {
+            handleMove(e.clientY);
         };
-    }, [isPulling, handleMouseMove, handleMouseUp]);
+
+        const onMouseUp = () => {
+            handleEnd();
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (e.touches.length > 0) {
+                handleMove(e.touches[0].clientY);
+            }
+        };
+
+        const onTouchEnd = () => {
+            handleEnd();
+        };
+
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseup", onMouseUp);
+        window.addEventListener("touchmove", onTouchMove, { passive: true });
+        window.addEventListener("touchend", onTouchEnd);
+
+        return () => {
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", onMouseUp);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
+        };
+    }, [isPulling, handleMove, handleEnd]);
 
     return (
         <>
@@ -110,7 +147,7 @@ export function PullCordTheme() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -15, scale: 0.85 }}
                         transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                        className="fixed top-20 right-6 sm:right-12 z-[100] max-w-xs px-4 py-2.5 rounded-2xl bg-black/90 dark:bg-white/95 text-white dark:text-black shadow-2xl border border-white/20 dark:border-black/20 text-xs font-mono font-bold flex items-center gap-2 select-none"
+                        className="fixed top-16 sm:top-20 right-4 sm:right-12 z-[100] max-w-[280px] sm:max-w-xs px-3.5 py-2.5 rounded-2xl bg-black/90 dark:bg-white/95 text-white dark:text-black shadow-2xl border border-white/20 dark:border-black/20 text-xs font-mono font-bold flex items-center gap-2 select-none"
                     >
                         <Zap className="w-4 h-4 text-amber-400 shrink-0 animate-bounce" />
                         <span>{quote}</span>
@@ -119,9 +156,9 @@ export function PullCordTheme() {
             </AnimatePresence>
 
             {/* The Ceiling Pull Cord Hanging Unit */}
-            <div className="fixed top-0 right-8 sm:right-16 z-50 flex flex-col items-center select-none pointer-events-auto">
+            <div className="fixed top-0 right-4 sm:right-16 z-50 flex flex-col items-center select-none pointer-events-auto">
                 {/* Brass Ceiling Mount */}
-                <div className="w-6 h-2 rounded-b-md bg-amber-600/90 shadow-md border-x border-b border-amber-400/40" />
+                <div className="w-5 sm:w-6 h-2 rounded-b-md bg-amber-600/90 shadow-md border-x border-b border-amber-400/40" />
 
                 {/* Beaded Brass Chain */}
                 <motion.div
@@ -131,7 +168,7 @@ export function PullCordTheme() {
                     }}
                     className="w-1 flex flex-col items-center gap-1 py-0.5"
                 >
-                    {Array.from({ length: 8 }).map((_, i) => (
+                    {Array.from({ length: 7 }).map((_, i) => (
                         <div
                             key={i}
                             className="w-1.5 h-1.5 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-200 shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
@@ -141,7 +178,8 @@ export function PullCordTheme() {
 
                 {/* The Pullable Light Bulb / Brass Ring */}
                 <motion.div
-                    onMouseDown={handleMouseDown}
+                    onMouseDown={onMouseDown}
+                    onTouchStart={onTouchStart}
                     onClick={() => {
                         pullY.set(50);
                         setTimeout(() => {
@@ -155,12 +193,12 @@ export function PullCordTheme() {
                     }}
                     whileHover={{ scale: 1.15 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`cursor-grab active:cursor-grabbing relative p-2 rounded-full border transition-shadow ${
+                    className={`cursor-grab active:cursor-grabbing relative p-2 sm:p-2.5 rounded-full border transition-shadow touch-none ${
                         isDark
                             ? "bg-[#161622] border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.3)]"
                             : "bg-amber-100 border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.6)]"
                     }`}
-                    title="Pull or click to toggle theme (Warning: may cause flashbang)"
+                    title="Pull or tap to toggle theme (Warning: may cause flashbang)"
                 >
                     {/* Glowing Filament */}
                     <div className="relative flex items-center justify-center">
@@ -172,7 +210,7 @@ export function PullCordTheme() {
                     </div>
 
                     {/* Pull Me Tooltip Tag */}
-                    <div className="absolute top-1/2 -left-20 -translate-y-1/2 px-2 py-0.5 rounded-md bg-black/80 dark:bg-white/90 text-white dark:text-black text-[9px] font-mono font-bold tracking-wider opacity-0 hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                    <div className="absolute top-1/2 -left-20 -translate-y-1/2 px-2 py-0.5 rounded-md bg-black/80 dark:bg-white/90 text-white dark:text-black text-[9px] font-mono font-bold tracking-wider opacity-0 hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg hidden sm:block">
                         YANK CORD ↓
                     </div>
                 </motion.div>

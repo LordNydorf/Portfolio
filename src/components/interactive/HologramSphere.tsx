@@ -56,16 +56,16 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
         let lastMouseX = 0;
         let lastMouseY = 0;
 
-        const handleMouseDown = (e: MouseEvent) => {
+        const handleStart = (clientX: number, clientY: number) => {
             isDragging = true;
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
+            lastMouseX = clientX;
+            lastMouseY = clientY;
         };
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMove = (clientX: number, clientY: number) => {
             if (!isDragging) return;
-            const dx = e.clientX - lastMouseX;
-            const dy = e.clientY - lastMouseY;
+            const dx = clientX - lastMouseX;
+            const dy = clientY - lastMouseY;
 
             velY = dx * 0.005;
             velX = -dy * 0.005;
@@ -73,17 +73,39 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
             rotY += velY;
             rotX += velX;
 
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
+            lastMouseX = clientX;
+            lastMouseY = clientY;
         };
 
-        const handleMouseUp = () => {
+        const handleEnd = () => {
             isDragging = false;
         };
 
-        canvas.addEventListener("mousedown", handleMouseDown);
-        window.addEventListener("mousemove", handleMouseMove, { passive: true });
-        window.addEventListener("mouseup", handleMouseUp, { passive: true });
+        const onMouseDown = (e: MouseEvent) => handleStart(e.clientX, e.clientY);
+        const onMouseMove = (e: MouseEvent) => handleMove(e.clientX, e.clientY);
+        const onMouseUp = () => handleEnd();
+
+        const onTouchStart = (e: TouchEvent) => {
+            if (e.touches.length > 0) {
+                handleStart(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (e.touches.length > 0) {
+                handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        };
+
+        const onTouchEnd = () => handleEnd();
+
+        canvas.addEventListener("mousedown", onMouseDown);
+        window.addEventListener("mousemove", onMouseMove, { passive: true });
+        window.addEventListener("mouseup", onMouseUp);
+
+        canvas.addEventListener("touchstart", onTouchStart, { passive: true });
+        window.addEventListener("touchmove", onTouchMove, { passive: true });
+        window.addEventListener("touchend", onTouchEnd);
 
         let animId: number;
 
@@ -170,14 +192,18 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
 
         return () => {
             cancelAnimationFrame(animId);
-            canvas.removeEventListener("mousedown", handleMouseDown);
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+            canvas.removeEventListener("mousedown", onMouseDown);
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", onMouseUp);
+
+            canvas.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
         };
     }, [size, isDark]);
 
     return (
-        <div className="relative cursor-grab active:cursor-grabbing inline-block select-none group">
+        <div className="relative cursor-grab active:cursor-grabbing inline-block select-none group touch-none">
             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full -z-10 animate-pulse-glow" />
             <canvas
                 ref={canvasRef}

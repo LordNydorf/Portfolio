@@ -41,46 +41,46 @@ export function About() {
             </div>
 
             {/* Grand Hero Monolith */}
-            <div className="flex flex-col md:grid md:grid-cols-[1.3fr,1fr] gap-12 items-center md:items-start mb-20 animate-fade-up">
-                <div className="space-y-6 order-2 md:order-1 pt-2">
+            <div className="flex flex-col md:grid md:grid-cols-[1.3fr,1fr] gap-10 md:gap-12 items-center md:items-start mb-16 md:mb-20 animate-fade-up">
+                <div className="space-y-6 order-2 md:order-1 pt-2 w-full">
                     <div>
-                        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 text-foreground flex items-center gap-3">
-                            <VariableProximity label={resume.name} radius={130} />
-                            <ShinyText text="✦" className="text-primary text-3xl sm:text-4xl hidden sm:inline-block" />
+                        <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight mb-4 text-foreground flex flex-wrap items-center gap-2 sm:gap-3">
+                            <VariableProximity label={resume.name} radius={110} />
+                            <ShinyText text="✦" className="text-primary text-2xl sm:text-4xl hidden sm:inline-block" />
                         </h1>
-                        <div className="h-1.5 w-24 bg-gradient-to-r from-primary to-secondary rounded-full shadow-[0_0_16px_rgba(239,68,68,0.6)]" />
+                        <div className="h-1.5 w-20 sm:w-24 bg-gradient-to-r from-primary to-secondary rounded-full shadow-[0_0_16px_rgba(239,68,68,0.6)]" />
                     </div>
 
-                    <div className="space-y-4 text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                    <div className="space-y-3.5 sm:space-y-4 text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
                         <p>I'm <span className="text-foreground font-semibold tracking-tight">{resume.name}</span>, a {resume.role} based in {resume.location}.</p>
                         <p>
                             {resume.bio[0]}{" "}
-                            <span className="text-primary font-mono font-bold inline-block whitespace-nowrap min-w-[15ch] drop-shadow-sm">
+                            <span className="text-primary font-mono font-bold inline-block whitespace-nowrap min-w-[14ch] drop-shadow-sm">
                                 {typeText}
                             </span>
                         </p>
-                        {resume.bio.slice(1).map((text, i) => <p key={i} className="text-base text-muted-foreground/90">{text}</p>)}
+                        {resume.bio.slice(1).map((text, i) => <p key={i} className="text-sm sm:text-base text-muted-foreground/90">{text}</p>)}
                     </div>
 
                     {/* Quick Hero CTA Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-4 pt-4">
-                        <Magnet padding={30} magnetStrength={3}>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+                        <Magnet padding={20} magnetStrength={2.5} wrapperClassName="w-full sm:w-auto">
                             <Button
                                 size="lg"
                                 onClick={() => scrollTo("portfolio")}
-                                className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-2xl shadow-[0_10px_30px_-5px_hsl(var(--primary)/0.4)] px-6"
+                                className="w-full sm:w-auto gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-2xl shadow-[0_10px_30px_-5px_hsl(var(--primary)/0.4)] px-6 h-12"
                             >
                                 <span>Explore Works</span>
                                 <ArrowDown className="w-4 h-4 animate-bounce" />
                             </Button>
                         </Magnet>
 
-                        <Magnet padding={30} magnetStrength={3}>
+                        <Magnet padding={20} magnetStrength={2.5} wrapperClassName="w-full sm:w-auto">
                             <Button
                                 size="lg"
                                 variant="outline"
                                 onClick={() => scrollTo("contact")}
-                                className="gap-2 border-black/10 dark:border-white/15 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 font-semibold px-6"
+                                className="w-full sm:w-auto gap-2 border-black/10 dark:border-white/15 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 font-semibold px-6 h-12"
                             >
                                 <span>Get In Touch</span>
                                 <Send className="w-4 h-4" />
@@ -96,28 +96,28 @@ export function About() {
             </div>
 
             {/* Interactive 3D Spatial Physics Lab (Gyroscope & Swinging Lanyard Badge) */}
-            <div className="grid md:grid-cols-2 gap-8 mb-12 animate-fade-up">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 animate-fade-up">
                 {/* 3D Particle Gyroscope */}
                 <SpotlightCard
                     spotlightColor="rgba(239, 68, 68, 0.2)"
                     data-cursor="drag"
                     data-cursor-text="DRAG ✦"
-                    className="p-8 rounded-[2rem] border border-black/10 dark:border-white/10 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing"
+                    className="p-5 sm:p-8 rounded-[2rem] border border-black/10 dark:border-white/10 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing"
                 >
-                    <div className="space-y-2 pointer-events-none mb-6">
+                    <div className="space-y-2 pointer-events-none mb-4 sm:mb-6">
                         <div className="inline-flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-wider font-semibold">
                             <Cpu className="w-4 h-4" />
                             <span>Spatial Inertia Core</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-foreground">
+                        <h3 className="text-xl sm:text-2xl font-bold text-foreground">
                             <DecryptedText text="Quantum Particle Gyroscope" speed={30} />
                         </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
+                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
                             Drag and throw the 3D particle node sphere to experience spatial physics.
                         </p>
                     </div>
 
-                    <div className="flex items-center justify-center py-4" data-cursor="drag" data-cursor-text="DRAG ✦">
+                    <div className="flex items-center justify-center py-2 sm:py-4" data-cursor="drag" data-cursor-text="DRAG ✦">
                         <HologramSphere size={isMobile ? 180 : 200} />
                     </div>
                 </SpotlightCard>
@@ -125,17 +125,17 @@ export function About() {
                 {/* 3D Physics Hanging Developer ID Badge */}
                 <SpotlightCard
                     spotlightColor="rgba(239, 68, 68, 0.2)"
-                    className="p-8 rounded-[2rem] border border-black/10 dark:border-white/10 flex flex-col justify-between shadow-xl overflow-hidden"
+                    className="p-5 sm:p-8 rounded-[2rem] border border-black/10 dark:border-white/10 flex flex-col justify-between shadow-xl overflow-hidden"
                 >
                     <div className="space-y-2 pointer-events-none mb-2">
                         <div className="inline-flex items-center gap-2 text-emerald-400 font-mono text-xs uppercase tracking-wider font-semibold">
                             <ShieldCheck className="w-4 h-4" />
                             <span>Verified Credentials</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-foreground">
+                        <h3 className="text-xl sm:text-2xl font-bold text-foreground">
                             <DecryptedText text="Developer ID Lanyard" speed={30} />
                         </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
+                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
                             Grab and fling the 3D badge to trigger momentum swinging physics.
                         </p>
                     </div>
@@ -147,11 +147,11 @@ export function About() {
             </div>
 
             {/* Technical Arsenal & Attributes Bento Grid */}
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 {/* Technical Arsenal */}
                 <SpotlightCard
                     spotlightColor={hoveredSkill && languageHsl[hoveredSkill] ? `hsla(${languageHsl[hoveredSkill]}, 0.25)` : "rgba(239, 68, 68, 0.15)"}
-                    className="p-8 sm:p-10 rounded-[2rem] animate-fade-up delay-300"
+                    className="p-5 sm:p-8 md:p-10 rounded-[2rem] animate-fade-up delay-300"
                 >
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20 shadow-[0_0_15px_-3px_hsl(var(--primary)/0.3)]">
@@ -198,7 +198,7 @@ export function About() {
                 {/* Personal Side */}
                 <SpotlightCard
                     spotlightColor="rgba(244, 63, 94, 0.15)"
-                    className="p-8 sm:p-10 rounded-[2rem] animate-fade-up delay-400"
+                    className="p-5 sm:p-8 md:p-10 rounded-[2rem] animate-fade-up delay-400"
                 >
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2.5 bg-secondary/15 rounded-xl text-secondary border border-secondary/30 shadow-[0_0_15px_-3px_hsl(var(--secondary)/0.3)]">

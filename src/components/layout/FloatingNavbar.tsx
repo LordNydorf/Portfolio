@@ -116,17 +116,17 @@ export function FloatingNavbar({
             </motion.header>
 
             {/* Mobile Top Floating Capsule */}
-            <header className="md:hidden fixed top-3 inset-x-3 z-50 flex items-center justify-between p-2.5 rounded-2xl bg-background/85 dark:bg-[#0c0c10]/90 backdrop-blur-2xl border border-black/10 dark:border-white/10 shadow-lg">
-                <button onClick={() => handleItemClick("about")} className="flex items-center gap-2">
+            <header className="md:hidden fixed top-3 left-3 right-16 z-50 flex items-center justify-between p-2.5 rounded-2xl bg-background/85 dark:bg-[#0c0c10]/90 backdrop-blur-2xl border border-black/10 dark:border-white/10 shadow-lg">
+                <button onClick={() => handleItemClick("about")} className="flex items-center gap-2 min-w-0 pr-1">
                     <img
                         src={getAssetUrl("/portrait_tiny.webp")}
                         alt={resume.name}
-                        className="w-8 h-8 rounded-full border border-black/10 dark:border-white/20 object-cover shadow-sm"
+                        className="w-7 h-7 rounded-full border border-black/10 dark:border-white/20 object-cover shadow-sm shrink-0"
                     />
-                    <span className="text-xs font-bold text-foreground">{resume.name}</span>
+                    <span className="text-xs font-bold text-foreground truncate">{resume.name}</span>
                 </button>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 shrink-0">
                     <AtmosphereSwitcher
                         variant="compact"
                         currentAtmosphereId={atmosphere}

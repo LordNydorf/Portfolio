@@ -121,17 +121,17 @@ export function Portfolio() {
     };
 
     return (
-        <section id="portfolio" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 relative">
-            <header className="flex flex-col gap-4 mb-10 border-b border-black/10 dark:border-white/10 pb-6 animate-fade-up">
+        <section id="portfolio" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6 relative">
+            <header className="flex flex-col gap-4 mb-8 sm:mb-10 border-b border-black/10 dark:border-white/10 pb-6 animate-fade-up">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
                             <DecryptedText text="Featured Works" speed={35} />
                         </h2>
                     </div>
 
                     {/* Interactive Filter Bar */}
-                    <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 relative overflow-x-auto hide-scrollbar self-start md:self-auto">
+                    <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 relative overflow-x-auto hide-scrollbar max-w-full w-full sm:w-auto">
                         <Filter className="w-3.5 h-3.5 ml-2 mr-1 text-muted-foreground shrink-0 hidden sm:inline-block" />
                         {CATEGORIES.map((cat) => {
                             const isActive = activeCategory === cat;
@@ -140,7 +140,7 @@ export function Portfolio() {
                                     key={cat}
                                     onClick={() => handleSelectCategory(cat)}
                                     className={cn(
-                                        "relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap z-10",
+                                        "relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap z-10 shrink-0",
                                         isActive ? "text-primary dark:text-white font-semibold" : "text-muted-foreground hover:text-foreground"
                                     )}
                                 >
@@ -157,7 +157,7 @@ export function Portfolio() {
                         })}
                     </div>
                 </div>
-                <p className="text-muted-foreground text-base">Showing {filteredProjects.length} of {projects.length} featured engineering projects.</p>
+                <p className="text-muted-foreground text-sm sm:text-base">Showing {filteredProjects.length} of {projects.length} featured engineering projects.</p>
             </header>
 
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">

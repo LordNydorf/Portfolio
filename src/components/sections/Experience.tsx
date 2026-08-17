@@ -22,29 +22,29 @@ export function Experience() {
     );
 
     return (
-        <section id="experience" className="py-24 max-w-5xl mx-auto px-4 sm:px-6">
+        <section id="experience" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6">
             {/* Header with Decrypted Matrix Typography */}
-            <header className="mb-14 animate-fade-up flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <header className="mb-10 sm:mb-14 animate-fade-up flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono font-semibold mb-3">
                         <GitBranch className="w-3.5 h-3.5" />
                         <span>GIT LOG // CAREER TREE</span>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
                         <DecryptedText text="Career Journey" speed={35} maxIterations={10} />
                     </h2>
-                    <p className="text-muted-foreground text-base sm:text-lg mt-2">
+                    <p className="text-muted-foreground text-sm sm:text-base md:text-lg mt-2">
                         Git commit graph of academic milestones and engineering experience.
                     </p>
                 </div>
 
                 {/* Branch Switcher Filters */}
-                <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 self-start md:self-auto">
+                <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 overflow-x-auto hide-scrollbar max-w-full w-full sm:w-auto self-start md:self-auto">
                     <button
                         onClick={() => setActiveBranch("all")}
                         className={cn(
-                            "px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5",
+                            "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "all"
                                 ? "bg-primary text-primary-foreground shadow-md"
                                 : "text-muted-foreground hover:text-foreground"
@@ -57,7 +57,7 @@ export function Experience() {
                     <button
                         onClick={() => setActiveBranch("work")}
                         className={cn(
-                            "px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5",
+                            "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "work"
                                 ? "bg-primary text-primary-foreground shadow-md"
                                 : "text-muted-foreground hover:text-foreground"
@@ -70,7 +70,7 @@ export function Experience() {
                     <button
                         onClick={() => setActiveBranch("education")}
                         className={cn(
-                            "px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5",
+                            "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "education"
                                 ? "bg-primary text-primary-foreground shadow-md"
                                 : "text-muted-foreground hover:text-foreground"
@@ -83,7 +83,7 @@ export function Experience() {
             </header>
 
             {/* Git Branch Laser Timeline */}
-            <div className="relative space-y-12 before:absolute before:inset-0 before:ml-6 md:before:mx-auto before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-primary/60 before:to-primary/20 before:shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+            <div className="relative space-y-8 sm:space-y-12 before:absolute before:inset-0 before:ml-5 sm:before:ml-6 md:before:mx-auto before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-primary/60 before:to-primary/20 before:shadow-[0_0_12px_rgba(239,68,68,0.5)]">
                 {filteredExperience.map((job, index) => {
                     const commitHash = COMMIT_HASHES[index % COMMIT_HASHES.length];
                     const diff = DIFF_STATS[index % DIFF_STATS.length];
@@ -100,7 +100,7 @@ export function Experience() {
                             {/* Git Commit Node Anchor */}
                             <div
                                 className={cn(
-                                    "absolute left-6 md:left-1/2 w-12 h-12 rounded-2xl border bg-background dark:bg-[#0c0c12] backdrop-blur-xl flex items-center justify-center z-10 -translate-x-1/2 md:-translate-x-1/2 transition-all duration-300",
+                                    "absolute left-5 sm:left-6 md:left-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border bg-background dark:bg-[#0c0c12] backdrop-blur-xl flex items-center justify-center z-10 -translate-x-1/2 md:-translate-x-1/2 transition-all duration-300",
                                     isHovered
                                         ? "scale-125 border-primary shadow-[0_0_25px_rgba(239,68,68,0.7)] rotate-6"
                                         : "border-primary/40 shadow-[0_0_12px_-2px_hsl(var(--primary)/0.4)]"
@@ -108,21 +108,21 @@ export function Experience() {
                             >
                                 <GitCommit
                                     className={cn(
-                                        "w-5 h-5 transition-colors",
+                                        "w-4 h-4 sm:w-5 sm:h-5 transition-colors",
                                         job.type === "work" ? "text-primary" : "text-secondary"
                                     )}
                                 />
                             </div>
 
                             {/* Experience Commit Card */}
-                            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] ml-16 md:ml-0">
+                            <div className="w-[calc(100%-3.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] ml-14 sm:ml-16 md:ml-0">
                                 <SpotlightCard
                                     spotlightColor={
                                         job.type === "work"
                                             ? "rgba(239, 68, 68, 0.2)"
                                             : "rgba(244, 63, 94, 0.2)"
                                     }
-                                    className="p-7 sm:p-8 rounded-[2rem] transition-all duration-300 group-hover:-translate-y-1.5 border border-black/10 dark:border-white/10 shadow-xl"
+                                    className="p-5 sm:p-7 md:p-8 rounded-[2rem] transition-all duration-300 group-hover:-translate-y-1.5 border border-black/10 dark:border-white/10 shadow-xl"
                                 >
                                     {/* Commit Metadata Bar */}
                                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/5 dark:border-white/10 pb-3 mb-4 text-xs font-mono">

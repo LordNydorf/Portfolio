@@ -22,41 +22,56 @@ export function LanyardBadge() {
     const rotateY = useTransform(springX, [-150, 150], [-30, 30]);
     const rotateX = useTransform(springY, [-150, 150], [25, -25]);
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
+    const handlePointerMove = useCallback((clientX: number, clientY: number) => {
         if (!cardRef.current || !isDragging) return;
         const rect = cardRef.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        mouseX.set(e.clientX - centerX);
-        mouseY.set(e.clientY - centerY);
+        mouseX.set(clientX - centerX);
+        mouseY.set(clientY - centerY);
     }, [isDragging, mouseX, mouseY]);
 
-    const handleMouseUp = useCallback(() => {
+    const handlePointerUp = useCallback(() => {
         setIsDragging(false);
         mouseX.set(0);
         mouseY.set(0);
     }, [mouseX, mouseY]);
 
     useEffect(() => {
-        if (isDragging) {
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("mouseup", handleMouseUp);
-        }
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+        if (!isDragging) return;
+
+        const onMouseMove = (e: MouseEvent) => {
+            handlePointerMove(e.clientX, e.clientY);
         };
-    }, [isDragging, handleMouseMove, handleMouseUp]);
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (e.touches.length > 0) {
+                handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        };
+
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseup", handlePointerUp);
+        window.addEventListener("touchmove", onTouchMove, { passive: true });
+        window.addEventListener("touchend", handlePointerUp);
+
+        return () => {
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", handlePointerUp);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", handlePointerUp);
+        };
+    }, [isDragging, handlePointerMove, handlePointerUp]);
 
     const photoSrc = getAssetUrl("/portrait_rohit_bgless.webp");
 
     return (
-        <div className="relative flex flex-col items-center justify-center select-none py-4">
+        <div className="relative flex flex-col items-center justify-center select-none py-4 w-full">
             {/* Lanyard Top Ribbon & Metal Clip */}
             <div className="flex flex-col items-center z-20 pointer-events-none">
                 {/* Lanyard Ribbon Strap */}
-                <div className="w-6 h-16 bg-gradient-to-b from-primary/80 via-primary to-primary/90 rounded-t-md shadow-md border-x border-white/20 relative flex items-center justify-center overflow-hidden">
+                <div className="w-6 h-14 sm:h-16 bg-gradient-to-b from-primary/80 via-primary to-primary/90 rounded-t-md shadow-md border-x border-white/20 relative flex items-center justify-center overflow-hidden">
                     <div className="w-1 h-full bg-white/25" />
                     <span className="absolute text-[8px] font-mono text-white/80 rotate-90 tracking-widest font-bold">
                         DEV-ID
@@ -72,6 +87,7 @@ export function LanyardBadge() {
             <motion.div
                 ref={cardRef}
                 onMouseDown={() => setIsDragging(true)}
+                onTouchStart={() => setIsDragging(true)}
                 style={{
                     x: springX,
                     y: springY,
@@ -81,7 +97,7 @@ export function LanyardBadge() {
                     transformPerspective: 1000,
                     transformStyle: "preserve-3d"
                 }}
-                className={`relative w-[280px] sm:w-[300px] h-[400px] rounded-[1.75rem] p-6 -mt-2 cursor-grab active:cursor-grabbing transition-shadow ${
+                className={`relative w-full max-w-[270px] sm:max-w-[300px] h-[380px] sm:h-[400px] rounded-[1.75rem] p-5 sm:p-6 -mt-2 cursor-grab active:cursor-grabbing transition-shadow touch-none ${
                     isDragging
                         ? "shadow-[0_30px_70px_-15px_rgba(239,68,68,0.5)] scale-105"
                         : "shadow-[0_20px_45px_-10px_rgba(0,0,0,0.4)]"
@@ -110,8 +126,8 @@ export function LanyardBadge() {
                 </div>
 
                 {/* Photo & Identity Core */}
-                <div className="flex flex-col items-center text-center my-auto z-10 space-y-3">
-                    <div className="relative w-24 h-24 rounded-2xl p-1 bg-gradient-to-tr from-primary via-white/20 to-primary/40 shadow-lg overflow-hidden">
+                <div className="flex flex-col items-center text-center my-auto z-10 space-y-2.5 sm:space-y-3">
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-1 bg-gradient-to-tr from-primary via-white/20 to-primary/40 shadow-lg overflow-hidden">
                         <img
                             src={photoSrc}
                             alt={resume.name}
@@ -121,7 +137,7 @@ export function LanyardBadge() {
                     </div>
 
                     <div>
-                        <h4 className="text-xl font-bold text-foreground tracking-tight">{resume.name}</h4>
+                        <h4 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">{resume.name}</h4>
                         <p className="text-xs text-primary font-mono font-semibold">{resume.role}</p>
                     </div>
 
@@ -137,7 +153,7 @@ export function LanyardBadge() {
                             ACCESS: LEVEL 5 // ROOT
                         </div>
                         {/* Realistic ASCII Barcode Lines */}
-                        <div className="flex items-center gap-0.5 h-6">
+                        <div className="flex items-center gap-0.5 h-5 sm:h-6">
                             {[3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 1, 3, 1, 4, 2, 3, 1, 2].map((w, i) => (
                                 <div
                                     key={i}
@@ -148,8 +164,8 @@ export function LanyardBadge() {
                         </div>
                     </div>
 
-                    <div className="p-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/10 dark:border-white/10 text-muted-foreground">
-                        <QrCode className="w-6 h-6 text-foreground/80" />
+                    <div className="p-1.5 sm:p-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/10 dark:border-white/10 text-muted-foreground">
+                        <QrCode className="w-5 h-5 sm:w-6 sm:h-6 text-foreground/80" />
                     </div>
                 </div>
 
