@@ -19,7 +19,8 @@ import {
     Box,
     Copy,
     Sun,
-    Moon
+    Moon,
+    Activity
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "@/components/providers";
@@ -58,6 +59,9 @@ export function CommandMenu({ onNavigate }: CommandMenuProps) {
                 <CommandGroup heading="Navigation">
                     <CommandItem value="about" onSelect={() => runCommand(() => onNavigate("about"))}>
                         <User className="mr-2 h-4 w-4" /> About Me <CommandShortcut>⌘A</CommandShortcut>
+                    </CommandItem>
+                    <CommandItem value="github activity commits contributions" onSelect={() => runCommand(() => onNavigate("about"))}>
+                        <Activity className="mr-2 h-4 w-4 text-emerald-500" /> GitHub Activity <CommandShortcut>⌘G</CommandShortcut>
                     </CommandItem>
                     <CommandItem value="portfolio" onSelect={() => runCommand(() => onNavigate("portfolio"))}>
                         <LayoutDashboard className="mr-2 h-4 w-4" /> Portfolio <CommandShortcut>⌘P</CommandShortcut>

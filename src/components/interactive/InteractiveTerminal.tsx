@@ -59,10 +59,22 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs py-1">
                         <div><span className="text-primary font-mono font-bold">about</span> - Who is Rohit Krishnan?</div>
                         <div><span className="text-primary font-mono font-bold">skills</span> - Technical arsenal matrix</div>
+                        <div><span className="text-primary font-mono font-bold">github</span> - Live GitHub activity & commits</div>
                         <div><span className="text-primary font-mono font-bold">works</span> - Jump to project case studies</div>
                         <div><span className="text-primary font-mono font-bold">theme &lt;mode&gt;</span> - Set shader: crimson, violet, matrix, aurora</div>
                         <div><span className="text-primary font-mono font-bold">hire</span> - Open direct contact terminal</div>
                         <div><span className="text-primary font-mono font-bold">clear</span> - Clear terminal logs</div>
+                    </div>
+                );
+                break;
+
+            case "github":
+            case "commits":
+            case "activity":
+                output = (
+                    <div className="text-xs space-y-1">
+                        <p className="text-emerald-400 font-bold">✓ Live GitHub Telemetry Active (@LordNydorf)</p>
+                        <p className="text-muted-foreground">View the live commit matrix in the About section or at <a href="https://github.com/LordNydorf" target="_blank" rel="noreferrer" className="text-foreground underline">github.com/LordNydorf</a>.</p>
                     </div>
                 );
                 break;

@@ -1,25 +1,81 @@
-// src/components/sections/About.tsx
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Code, Heart, Cpu, ArrowDown, Send, ShieldCheck } from "lucide-react";
+import {
+    Code,
+    Heart,
+    Cpu,
+    ArrowDown,
+    Send,
+    ShieldCheck,
+    Terminal,
+    Smartphone,
+    Brain,
+    Database,
+    Wrench
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import { languageHsl } from "@/lib/colours";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTypewriter } from "@/hooks/use-typewriter";
-import { TiltedFigure, HologramSphere, LanyardBadge } from "@/components/interactive";
+import { TiltedFigure, HologramSphere, LanyardBadge, GitHubContributions } from "@/components/interactive";
 import { SpotlightCard, ShinyText, VariableProximity, DecryptedText, Marquee, Magnet } from "@/components/effects";
 import { getAssetUrl } from "@/lib/utils";
 import { resume } from "@/data/resume";
+
+const SKILL_CATEGORIES = [
+    {
+        id: "languages",
+        label: "Languages",
+        shortLabel: "Languages",
+        icon: Terminal,
+        skills: ["Dart", "Python", "TypeScript", "JavaScript", "Java", "SQL", "HTML/CSS", "Bash"]
+    },
+    {
+        id: "frameworks",
+        label: "Mobile & Web",
+        shortLabel: "Mobile & Web",
+        icon: Smartphone,
+        skills: ["Flutter", "React", "Astro", "Node.js", "FastAPI", "Flask"]
+    },
+    {
+        id: "ai-data",
+        label: "AI / ML & Data",
+        shortLabel: "AI & ML",
+        icon: Brain,
+        skills: ["Gemini API", "LLaMA 3", "TensorFlow", "scikit-learn", "YOLOv8", "SFTTrainer", "Streamlit", "pandas", "NumPy", "Matplotlib"]
+    },
+    {
+        id: "cloud-db",
+        label: "Cloud & Databases",
+        shortLabel: "Cloud & DB",
+        icon: Database,
+        skills: ["Firebase", "Google Cloud", "Hive"]
+    },
+    {
+        id: "tools",
+        label: "Tools & IDEs",
+        shortLabel: "Tools",
+        icon: Wrench,
+        skills: ["Git", "VS Code", "Cursor", "Windsurf", "Antigravity", "Linear", "PyCharm", "IntelliJ", "Eclipse", "Slack"]
+    }
+];
 
 export function About() {
     const isMobile = useIsMobile();
     const typeText = useTypewriter(resume.typewriterWords, 100, 2000);
     const src = getAssetUrl(isMobile ? "/portrait_rohit_bgless_mobile.webp" : "/portrait_rohit_bgless.webp");
     const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+    const [activeCategory, setActiveCategory] = useState<string>("all");
 
     const scrollTo = (id: string) => {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     };
+
+    const displayedCategories = useMemo(() => {
+        if (activeCategory === "all") return SKILL_CATEGORIES;
+        return SKILL_CATEGORIES.filter(cat => cat.id === activeCategory);
+    }, [activeCategory]);
 
     return (
         <section id="about" className="pt-28 md:pt-36 pb-16 max-w-6xl mx-auto px-4 sm:px-6">
@@ -151,47 +207,108 @@ export function About() {
                 {/* Technical Arsenal */}
                 <SpotlightCard
                     spotlightColor={hoveredSkill && languageHsl[hoveredSkill] ? `hsla(${languageHsl[hoveredSkill]}, 0.25)` : "rgba(239, 68, 68, 0.15)"}
-                    className="p-5 sm:p-8 md:p-10 rounded-[2rem] animate-fade-up delay-300"
+                    className="p-5 sm:p-7 md:p-8 rounded-[2rem] animate-fade-up delay-300 flex flex-col justify-between"
                 >
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20 shadow-[0_0_15px_-3px_hsl(var(--primary)/0.3)]">
-                            <Code className="h-6 w-6" />
+                    <div>
+                        {/* Header */}
+                        <div className="flex items-center justify-between gap-2 mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20 shadow-[0_0_15px_-3px_hsl(var(--primary)/0.3)]">
+                                    <Code className="h-5 w-5 sm:h-6 sm:w-6" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold tracking-tight text-foreground">
+                                        <DecryptedText text="Technical Arsenal" speed={30} />
+                                    </h2>
+                                    <p className="text-xs text-muted-foreground">Categorized stack & developer tools</p>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="text-xl font-bold tracking-tight text-foreground">
-                                <DecryptedText text="Technical Arsenal" speed={30} />
-                            </h2>
-                            <p className="text-xs text-muted-foreground">Languages, frameworks & developer tools</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2.5">
-                        {resume.skills.map((skill) => {
-                            const hsl = languageHsl[skill] ?? "0 0% 60%";
-                            const isHovered = hoveredSkill === skill;
 
-                            return (
-                                <Badge
-                                    key={skill}
-                                    variant="secondary"
-                                    onMouseEnter={() => setHoveredSkill(skill)}
-                                    onMouseLeave={() => setHoveredSkill(null)}
-                                    className="px-3.5 py-1.5 text-sm font-medium border transition-all duration-200 cursor-default select-none rounded-xl"
-                                    style={{
-                                        color: `hsl(${hsl})`,
-                                        borderColor: isHovered ? `hsl(${hsl} / 0.6)` : "rgba(150, 150, 150, 0.15)",
-                                        backgroundColor: isHovered ? `hsl(${hsl} / 0.15)` : "rgba(120, 120, 120, 0.05)",
-                                        boxShadow: isHovered ? `0 0 16px -2px hsl(${hsl} / 0.4)` : "none",
-                                        transform: isHovered ? "scale(1.05) translateY(-1px)" : "none"
-                                    }}
-                                >
-                                    <span
-                                        className="w-1.5 h-1.5 rounded-full mr-2 shrink-0 transition-opacity"
-                                        style={{ backgroundColor: `hsl(${hsl})`, opacity: isHovered ? 1 : 0.6 }}
-                                    />
-                                    {skill}
-                                </Badge>
-                            );
-                        })}
+                        {/* Category Filter Pills */}
+                        <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-4">
+                            <button
+                                onClick={() => setActiveCategory("all")}
+                                className={cn(
+                                    "px-2.5 py-1 rounded-xl text-xs font-mono font-semibold transition-all whitespace-nowrap",
+                                    activeCategory === "all"
+                                        ? "bg-primary text-primary-foreground shadow-sm"
+                                        : "bg-black/[0.03] dark:bg-white/[0.04] text-muted-foreground hover:text-foreground hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
+                                )}
+                            >
+                                All ({resume.skills.length})
+                            </button>
+                            {SKILL_CATEGORIES.map((cat) => {
+                                const isSelected = activeCategory === cat.id;
+                                const Icon = cat.icon;
+                                return (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setActiveCategory(cat.id)}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex items-center gap-1.5",
+                                            isSelected
+                                                ? "bg-primary text-primary-foreground shadow-sm"
+                                                : "bg-black/[0.03] dark:bg-white/[0.04] text-muted-foreground hover:text-foreground hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
+                                        )}
+                                    >
+                                        <Icon className="w-3 h-3" />
+                                        <span>{cat.shortLabel}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Categorized Skills Groups */}
+                        <div className="space-y-3">
+                            {displayedCategories.map((cat) => {
+                                const Icon = cat.icon;
+                                return (
+                                    <div
+                                        key={cat.id}
+                                        className="p-3 rounded-2xl bg-black/[0.015] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 space-y-2"
+                                    >
+                                        <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+                                            <div className="flex items-center gap-1.5 font-semibold text-foreground">
+                                                <Icon className="w-3.5 h-3.5 text-primary" />
+                                                <span>{cat.label}</span>
+                                            </div>
+                                            <span className="text-[10px] opacity-60 font-mono">{cat.skills.length} tools</span>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {cat.skills.map((skill) => {
+                                                const hsl = languageHsl[skill] ?? "0 0% 60%";
+                                                const isHovered = hoveredSkill === skill;
+
+                                                return (
+                                                    <Badge
+                                                        key={skill}
+                                                        variant="secondary"
+                                                        onMouseEnter={() => setHoveredSkill(skill)}
+                                                        onMouseLeave={() => setHoveredSkill(null)}
+                                                        className="px-2.5 py-1 text-xs font-medium border transition-all duration-150 cursor-default select-none rounded-lg"
+                                                        style={{
+                                                            color: `hsl(${hsl})`,
+                                                            borderColor: isHovered ? `hsl(${hsl} / 0.7)` : "rgba(150, 150, 150, 0.15)",
+                                                            backgroundColor: isHovered ? `hsl(${hsl} / 0.16)` : "rgba(120, 120, 120, 0.04)",
+                                                            boxShadow: isHovered ? `0 0 14px -2px hsl(${hsl} / 0.4)` : "none",
+                                                            transform: isHovered ? "scale(1.04) translateY(-1px)" : "none"
+                                                        }}
+                                                    >
+                                                        <span
+                                                            className="w-1.5 h-1.5 rounded-full mr-1.5 shrink-0 transition-opacity"
+                                                            style={{ backgroundColor: `hsl(${hsl})`, opacity: isHovered ? 1 : 0.65 }}
+                                                        />
+                                                        {skill}
+                                                    </Badge>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </SpotlightCard>
 
@@ -230,6 +347,9 @@ export function About() {
                     </div>
                 </SpotlightCard>
             </div>
+
+            {/* Live GitHub Commit Activity Heatmap */}
+            <GitHubContributions />
         </section>
     );
 }
