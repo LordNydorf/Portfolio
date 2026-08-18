@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://lordnydorf.github.io/Portfolio/sitemap.xml

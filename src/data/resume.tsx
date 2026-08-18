@@ -40,7 +40,7 @@ export const resume: SiteConfig = {
                     </svg>
                 )
             },
-            { name: "Email", url: "mailto:rohitkrishnanofficial.com", icon: Mail },
+            { name: "Email", url: "mailto:rohitkrishnanofficial@gmail.com", icon: Mail },
         ]
     },
 
