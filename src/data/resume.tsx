@@ -45,8 +45,8 @@ export const resume: SiteConfig = {
     },
 
     skills: [
-        "Dart", "Flutter", "Python", "Java", "HTML/CSS", "JavaScript", "TypeScript", "Bash", "FastAPI",
-        "Astro", "React", "Git", "SQL", "Node.js", "Flask", "Firebase", "Hive", "Google Cloud", "Gemini API",
+        "Dart", "Flutter", "Kotlin", "Jetpack Compose", "Ktor", "Python", "Java", "HTML/CSS", "JavaScript", "TypeScript", "Bash", "FastAPI",
+        "Astro", "React", "Git", "SQL", "SQLite", "Docker", "Node.js", "Flask", "Firebase", "Hive", "Riverpod", "Google Cloud", "Gemini API",
         "LLaMA 3", "TensorFlow", "scikit-learn", "YOLOv8", "Slack", "Linear", "VS Code", "Antigravity", "Cursor",
         "Windsurf", "PyCharm", "IntelliJ", "Eclipse", "Streamlit", "pandas", "NumPy", "Matplotlib", "SFTTrainer"
     ],
@@ -179,6 +179,38 @@ export const resume: SiteConfig = {
             ],
             languages: ["JavaScript"],
             demoUrl: "https://2dopros.com/",
+        },
+        {
+            title: "Job Tracker",
+            client: "Personal Project",
+            timeline: "1 week",
+            techStack: ["Kotlin", "Jetpack Compose", "Ktor", "SQLite", "Docker"],
+            images: ["/jobtracker/jobtracker.png"],
+            description: "A modern, production-grade Kotlin Multiplatform (KMP) application designed to track, manage, and follow up on job applications with zero friction. Features Material 3 Jetpack Compose UI, asynchronous Ktor Server backend with Exposed ORM & SQLite, API key security, and containerized cloud deployment.",
+            scope: "Full-Stack Mobile Development",
+            responsibilities: [
+                "Architected end-to-end Kotlin Multiplatform codebase with shared data models, validation, and serialization across Android and backend.",
+                "Crafted dynamic Material 3 Jetpack Compose interface with interactive pipeline stages, search, status filters, and follow-up nudges.",
+                "Engineered robust Ktor REST API backend with SQLite persistence, fail-loud API key security, and Docker/Render cloud deployment."
+            ],
+            languages: ["Kotlin"],
+            repoUrl: "https://github.com/LordNydorf/Job-Tracker",
+        },
+        {
+            title: "Kestrel",
+            client: "Personal Project",
+            timeline: "2 weeks",
+            techStack: ["Flutter", "Dart", "Riverpod", "SQLite"],
+            images: ["/kestrel/kestrel.png"],
+            description: "Ultra high-performance, mobile-first financial trading terminal built with Flutter, Riverpod, and SQLite. Engineered with a Technical Instrument aesthetic, delivering streaming real-time market data across high-frequency tick simulations (up to 50+ ticks/sec), atomic transactional order execution, persistent reorderable watchlists, and zero layout shift.",
+            scope: "Mobile App Development",
+            responsibilities: [
+                "Engineered high-frequency market simulation engine with isolated widget tree repaints and zero cumulative layout shift.",
+                "Implemented atomic SQLite trade execution with integer paise precision, strict financial validation, and wallet balance management.",
+                "Crafted Hallmark Obsidian design system with tabular figures and 200ms micro-flash price animations."
+            ],
+            languages: ["Dart"],
+            repoUrl: "https://github.com/LordNydorf/Kestrel",
         },
         {
             title: "ProofPic",
