@@ -69,16 +69,51 @@ export function Portfolio() {
 
     const filteredProjects = useMemo(() => {
         if (activeCategory === "All") return projects;
-        if (activeCategory === "Mobile Apps") {
-            return projects.filter(p => p.techStack.some(t => ["Flutter", "Dart", "Android", "iOS"].includes(t)) || p.languages.some(l => ["Dart", "Flutter"].includes(l)));
-        }
-        if (activeCategory === "AI & Systems") {
-            return projects.filter(p => p.techStack.some(t => ["Python", "FastAPI", "TensorFlow", "Gemini", "LLaMA", "AI", "ML"].includes(t)) || p.languages.some(l => ["Python", "FastAPI"].includes(l)));
-        }
-        if (activeCategory === "Web & Full-Stack") {
-            return projects.filter(p => p.techStack.some(t => ["React", "TypeScript", "Node.js", "Web", "Next.js", "Tailwind"].includes(t)) || p.languages.some(l => ["React", "TypeScript", "JavaScript", "HTML/CSS"].includes(l)));
-        }
-        return projects;
+
+        return projects.filter(p => {
+            // 1. Primary check: Explicit category tags if present
+            if (p.categories && Array.isArray(p.categories)) {
+                if (p.categories.includes(activeCategory)) return true;
+            }
+
+            // 2. Robust semantic fallback matching
+            const textToMatch = [
+                p.title,
+                p.scope,
+                p.description,
+                ...(p.techStack || []),
+                ...(p.languages || []),
+                ...(p.responsibilities || [])
+            ].join(" ").toLowerCase();
+
+            if (activeCategory === "Mobile Apps") {
+                return (
+                    p.scope.toLowerCase().includes("app") ||
+                    p.scope.toLowerCase().includes("mobile") ||
+                    ["flutter", "dart", "kotlin", "kmp", "compose", "android", "ios"].some(term => textToMatch.includes(term))
+                );
+            }
+
+            if (activeCategory === "Web & Full-Stack") {
+                return (
+                    p.scope.toLowerCase().includes("web") ||
+                    p.scope.toLowerCase().includes("full-stack") ||
+                    p.scope.toLowerCase().includes("website") ||
+                    ["react", "vite", "typescript", "javascript", "html", "css", "node", "flask", "ktor", "next.js"].some(term => textToMatch.includes(term))
+                );
+            }
+
+            if (activeCategory === "AI & Systems") {
+                return (
+                    p.scope.toLowerCase().includes("system") ||
+                    p.scope.toLowerCase().includes("desktop") ||
+                    p.scope.toLowerCase().includes("ai") ||
+                    ["gemini", "ai", "llama", "python", "trading", "sqlite", "mysql", "customtkinter", "ml", "tensorflow", "terminal"].some(term => textToMatch.includes(term))
+                );
+            }
+
+            return false;
+        });
     }, [projects, activeCategory]);
 
     const selectedProject = projects.find(p => p.title === selectedId);
@@ -161,7 +196,7 @@ export function Portfolio() {
             </header>
 
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <AnimatePresence>
+                <AnimatePresence mode="popLayout">
                     {filteredProjects.map((project, idx) => (
                         <motion.div
                             key={project.title}

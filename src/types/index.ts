@@ -31,6 +31,7 @@ export interface Project {
     images: string[];
     repoUrl?: string;
     demoUrl?: string;
+    categories?: string[];
 }
 
 export interface Attribute {

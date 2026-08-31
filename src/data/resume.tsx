@@ -147,6 +147,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Dart"],
             demoUrl: "https://play.google.com/store/apps/details?id=com.twodopros.userapp",
+            categories: ["Mobile Apps"],
         },
         {
             title: "2do Partners",
@@ -163,6 +164,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Dart"],
             demoUrl: "https://play.google.com/store/apps/details?id=com.twodopros.partnersapp",
+            categories: ["Mobile Apps"],
         },
         {
             title: "2do Pros",
@@ -179,6 +181,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["JavaScript"],
             demoUrl: "https://2dopros.com/",
+            categories: ["Web & Full-Stack"],
         },
         {
             title: "Job Tracker",
@@ -195,6 +198,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Kotlin"],
             repoUrl: "https://github.com/LordNydorf/Job-Tracker",
+            categories: ["Mobile Apps", "Web & Full-Stack"],
         },
         {
             title: "Kestrel",
@@ -211,6 +215,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Dart"],
             repoUrl: "https://github.com/LordNydorf/Kestrel",
+            categories: ["Mobile Apps", "AI & Systems"],
         },
         {
             title: "ProofPic",
@@ -227,6 +232,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Dart"],
             repoUrl: "https://github.com/LordNydorf/ProofShot",
+            categories: ["Mobile Apps"],
         },
         {
             title: "PlayPulse",
@@ -242,6 +248,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["Python", "HTML/CSS", "JavaScript", "Flask"],
             repoUrl: "https://github.com/LordNydorf/YTplaylistCalc",
+            categories: ["Web & Full-Stack"],
             demoUrl: "https://playpulse-duration.netlify.app/"
         },
         {
@@ -258,6 +265,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["React"],
             repoUrl: "https://github.com/LordNydorf/POTD-NASA",
+            categories: ["Web & Full-Stack"],
             demoUrl: "https://lordnydorf-potd-nasa.netlify.app/"
         },
         {
@@ -274,6 +282,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["HTML/CSS", "JavaScript", "React"],
             repoUrl: "https://github.com/LordNydorf/Todolist",
+            categories: ["Web & Full-Stack"],
             demoUrl: "https://taskflow-lordnydorf.netlify.app/"
         },
         {
@@ -289,7 +298,8 @@ export const resume: SiteConfig = {
                 "Integrating Google Gemini API.",
             ],
             languages: ["Dart"],
-            repoUrl: "https://github.com/LordNydorf/Smart-Trip-Planner"
+            repoUrl: "https://github.com/LordNydorf/Smart-Trip-Planner",
+            categories: ["Mobile Apps", "AI & Systems"]
         },
         {
             title: "Pennora",
@@ -304,7 +314,8 @@ export const resume: SiteConfig = {
                 "Key features include Smart Portfolio Management, Advanced KYC & Security",
             ],
             languages: ["Dart"],
-            repoUrl: "https://github.com/LordNydorf/Pennora"
+            repoUrl: "https://github.com/LordNydorf/Pennora",
+            categories: ["Mobile Apps"]
         },
         {
             title: "Prepgenius",
@@ -320,6 +331,7 @@ export const resume: SiteConfig = {
             ],
             languages: ["HTML/CSS", "JavaScript", "React"],
             repoUrl: "https://github.com/LordNydorf/PrepGenius",
+            categories: ["Web & Full-Stack"],
             demoUrl: "https://prepgenius-lordnydorf.netlify.app/"
         },
         {
@@ -335,7 +347,8 @@ export const resume: SiteConfig = {
                 "Enabling CSV Export and Excel Import.",
             ],
             languages: ["Python", "CustomTkinter", "SQLite", "MySQL"],
-            repoUrl: "https://github.com/duckcommit/Report-Card-Generator"
+            repoUrl: "https://github.com/duckcommit/Report-Card-Generator",
+            categories: ["AI & Systems"]
         },
     ],
 };
