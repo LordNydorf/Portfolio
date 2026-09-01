@@ -45,8 +45,8 @@ export const resume: SiteConfig = {
     },
 
     skills: [
-        "Dart", "Flutter", "Kotlin", "Jetpack Compose", "Ktor", "Python", "Java", "HTML/CSS", "JavaScript", "TypeScript", "Bash", "FastAPI",
-        "Astro", "React", "Git", "SQL", "SQLite", "Docker", "Node.js", "Flask", "Firebase", "Hive", "Riverpod", "Google Cloud", "Gemini API",
+        "Dart", "Flutter", "Kotlin", "Kotlin Multiplatform (KMP)", "Jetpack Compose", "Ktor", "WorkManager", "Python", "Java", "HTML/CSS", "JavaScript", "TypeScript", "Bash", "FastAPI",
+        "Astro", "React", "Git", "SQL", "SQLite", "Exposed ORM", "Gradle", "Docker", "Node.js", "Flask", "Firebase", "Hive", "Riverpod", "Google Cloud", "Gemini API",
         "LLaMA 3", "TensorFlow", "scikit-learn", "YOLOv8", "Slack", "Linear", "VS Code", "Antigravity", "Cursor",
         "Windsurf", "PyCharm", "IntelliJ", "Eclipse", "Streamlit", "pandas", "NumPy", "Matplotlib", "SFTTrainer"
     ],
@@ -187,14 +187,15 @@ export const resume: SiteConfig = {
             title: "Job Tracker",
             client: "Personal Project",
             timeline: "1 week",
-            techStack: ["Kotlin", "Jetpack Compose", "Ktor", "SQLite", "Docker"],
+            techStack: ["Kotlin Multiplatform (KMP)", "Jetpack Compose", "Ktor", "WorkManager", "SQLite / Exposed ORM", "Docker"],
             images: ["/jobtracker/jobtracker.png"],
-            description: "A modern, production-grade Kotlin Multiplatform (KMP) application designed to track, manage, and follow up on job applications with zero friction. Features Material 3 Jetpack Compose UI, asynchronous Ktor Server backend with Exposed ORM & SQLite, API key security, and containerized cloud deployment.",
+            description: "A modern, offline-first Kotlin Multiplatform (KMP) application designed to track, manage, and follow up on job applications with zero latency. Features an offline write queue with WorkManager background sync surviving cloud cold-starts, a high-contrast dual-theme Material 3 UI, and an asynchronous Ktor Server backend with Exposed ORM & Docker deployment.",
             scope: "Full-Stack Mobile Development",
             responsibilities: [
-                "Architected end-to-end Kotlin Multiplatform codebase with shared data models, validation, and serialization across Android and backend.",
-                "Crafted dynamic Material 3 Jetpack Compose interface with interactive pipeline stages, search, status filters, and follow-up nudges.",
-                "Engineered robust Ktor REST API backend with SQLite persistence, fail-loud API key security, and Docker/Render cloud deployment."
+                "Architected end-to-end Kotlin Multiplatform codebase with shared models, serialization, and offline-first local write queues.",
+                "Engineered reliable WorkManager background sync engine with client-generated UUIDs to eliminate latency from Render free-tier cold-starts.",
+                "Crafted high-contrast Material 3 Jetpack Compose UI with interactive pipeline stages, multi-step job wizard, in-line validation, and dynamic status bar insets.",
+                "Built asynchronous Ktor REST API backend with SQLite persistence, fail-loud API key authorization, and containerized Docker deployment."
             ],
             languages: ["Kotlin"],
             repoUrl: "https://github.com/LordNydorf/Job-Tracker",
