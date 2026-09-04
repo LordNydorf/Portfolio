@@ -72,7 +72,7 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
         let animationFrameId: number;
         let width = (canvas.width = window.innerWidth);
         let height = (canvas.height = window.innerHeight);
-        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
         canvas.width = width * dpr;
         canvas.height = height * dpr;
@@ -82,6 +82,7 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
         let mouseY = height / 2;
         let targetMouseX = width / 2;
         let targetMouseY = height / 2;
+        let isVisible = !document.hidden;
 
         const handleMouseMove = (e: MouseEvent) => {
             targetMouseX = e.clientX;
@@ -92,14 +93,22 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
             if (!canvas) return;
             width = window.innerWidth;
             height = window.innerHeight;
-            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            dpr = Math.min(window.devicePixelRatio || 1, 1.5);
             canvas.width = width * dpr;
             canvas.height = height * dpr;
             ctx.scale(dpr, dpr);
         };
 
+        const handleVisibilityChange = () => {
+            isVisible = !document.hidden;
+            if (isVisible && !prefersReducedMotion) {
+                animationFrameId = requestAnimationFrame(render);
+            }
+        };
+
         window.addEventListener("mousemove", handleMouseMove, { passive: true });
         window.addEventListener("resize", handleResize, { passive: true });
+        document.addEventListener("visibilitychange", handleVisibilityChange);
 
         // Simplex-inspired dynamic wave orbs
         const orbs = [
@@ -110,8 +119,10 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
         ];
 
         let time = 0;
+        const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         const render = () => {
+            if (!isVisible) return;
             time += 0.004;
 
             // Smooth spring mouse interpolation
@@ -190,7 +201,7 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
             }
             ctx.stroke();
 
-            // 5. Specular Intersection Flares near cursor
+            // 5. Specular Intersection Flares near cursor (High performance direct alpha drawing)
             const maxFlareDist = 180;
             const startX = Math.floor((mouseX - maxFlareDist) / gridSize) * gridSize;
             const endX = Math.ceil((mouseX + maxFlareDist) / gridSize) * gridSize;
@@ -207,28 +218,35 @@ export function ProceduralAtmosphere({ currentModeId }: ProceduralAtmosphereProp
                         const intensity = 1 - dist / maxFlareDist;
                         const flareRadius = 2 + intensity * 3;
 
+                        // Outer soft glow
+                        ctx.beginPath();
+                        ctx.arc(x, y, flareRadius * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = hexToRgba(palette[0], intensity * 0.25);
+                        ctx.fill();
+
+                        // Inner specular point
                         ctx.beginPath();
                         ctx.arc(x, y, flareRadius, 0, Math.PI * 2);
                         ctx.fillStyle = isDark
-                            ? `rgba(255, 255, 255, ${intensity * 0.7})`
-                            : `rgba(239, 68, 68, ${intensity * 0.6})`;
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = palette[0];
+                            ? `rgba(255, 255, 255, ${intensity * 0.8})`
+                            : `rgba(239, 68, 68, ${intensity * 0.7})`;
                         ctx.fill();
-                        ctx.shadowBlur = 0;
                     }
                 }
             }
 
-            animationFrameId = requestAnimationFrame(render);
+            if (!prefersReducedMotion && isVisible) {
+                animationFrameId = requestAnimationFrame(render);
+            }
         };
 
         render();
 
         return () => {
-            cancelAnimationFrame(animationFrameId);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("resize", handleResize);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
         };
     }, [activeMode, isDark]);
 

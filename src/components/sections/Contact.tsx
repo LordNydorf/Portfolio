@@ -1,5 +1,4 @@
-// src/components/sections/Contact.tsx
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { Send, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,15 +44,30 @@ export function Contact() {
         }
     };
 
+    useEffect(() => {
+        if (isSuccess) {
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") setIsSuccess(false);
+            };
+            window.addEventListener("keydown", handleKeyDown);
+            return () => window.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [isSuccess]);
+
     return (
-        <section id="contact" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6">
+        <section id="contact" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6 section-optimize">
             {isSuccess && createPortal(
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 animate-fade-up">
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="success-modal-title"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 animate-fade-up"
+                >
                     <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.25)" className="p-6 sm:p-8 rounded-3xl flex flex-col items-center border border-green-500/30 max-w-sm mx-4 text-center shadow-2xl">
                         <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4 text-green-500 dark:text-green-400 border border-green-500/30 animate-pulse-glow">
                             <Check className="h-8 w-8" />
                         </div>
-                        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground tracking-tight">Message Sent!</h2>
+                        <h2 id="success-modal-title" className="text-xl sm:text-2xl font-bold mb-2 text-foreground tracking-tight">Message Sent!</h2>
                         <p className="text-muted-foreground text-xs sm:text-sm">Thanks for reaching out. I'll get back to you soon.</p>
                         <Button variant="outline" className="mt-6 border-black/10 dark:border-white/10" onClick={() => setIsSuccess(false)}>
                             Close
@@ -88,7 +102,7 @@ export function Contact() {
                     <div className="space-y-2 group">
                         <Label htmlFor="reason" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Subject</Label>
                         <Select name="reason" required defaultValue="project">
-                            <SelectTrigger className="bg-black/[0.02] dark:bg-black/30 border-black/10 dark:border-white/10 focus:border-primary focus:ring-2 focus:ring-primary/20 h-11 sm:h-12 rounded-xl transition-all">
+                            <SelectTrigger id="reason" className="bg-black/[0.02] dark:bg-black/30 border-black/10 dark:border-white/10 focus:border-primary focus:ring-2 focus:ring-primary/20 h-11 sm:h-12 rounded-xl transition-all">
                                 <SelectValue placeholder="What's this about?" />
                             </SelectTrigger>
                             <SelectContent className="bg-background/95 dark:bg-[#0c0c10]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-xl">
@@ -108,10 +122,10 @@ export function Contact() {
                     <div className="pt-2">
                         <Magnet padding={30} magnetStrength={2.5} wrapperClassName="w-full md:w-auto">
                             <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground h-12 px-8 rounded-xl font-semibold text-base shadow-[0_0_20px_-3px_hsl(var(--primary)/0.5)]">
-                                {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Sending...</> : <><Send className="h-4 w-4 ml-2" /> Send Message</>}
+                                {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Sending...</> : <><Send className="h-4 w-4 mr-2" /> Send Message</>}
                             </Button>
                         </Magnet>
-                        {error && <p className="text-sm text-red-500 dark:text-red-400 mt-3 text-center md:text-left">{error}</p>}
+                        {error && <p role="alert" aria-live="polite" className="text-sm text-red-500 dark:text-red-400 mt-3 text-center md:text-left">{error}</p>}
                     </div>
                 </form>
             </SpotlightCard>

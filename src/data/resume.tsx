@@ -248,7 +248,7 @@ export const resume: SiteConfig = {
                 "Uses the YouTube Data API v3 to fetch video data from the playlist.",
             ],
             languages: ["Python", "HTML/CSS", "JavaScript", "Flask"],
-            repoUrl: "https://github.com/LordNydorf/YTplaylistCalc",
+            repoUrl: "https://github.com/LordNydorf/PlayPulse",
             categories: ["Web & Full-Stack"],
             demoUrl: "https://playpulse-duration.netlify.app/"
         },
@@ -282,7 +282,7 @@ export const resume: SiteConfig = {
                 "Envisioning and designing a brand identity.",
             ],
             languages: ["HTML/CSS", "JavaScript", "React"],
-            repoUrl: "https://github.com/LordNydorf/Todolist",
+            repoUrl: "https://github.com/LordNydorf/TaskFlow",
             categories: ["Web & Full-Stack"],
             demoUrl: "https://taskflow-lordnydorf.netlify.app/"
         },
@@ -299,7 +299,8 @@ export const resume: SiteConfig = {
                 "Integrating Google Gemini API.",
             ],
             languages: ["Dart"],
-            repoUrl: "https://github.com/LordNydorf/Smart-Trip-Planner",
+            repoUrl: "https://github.com/LordNydorf/Itinera"
+            ,
             categories: ["Mobile Apps", "AI & Systems"]
         },
         {
@@ -315,7 +316,8 @@ export const resume: SiteConfig = {
                 "Key features include Smart Portfolio Management, Advanced KYC & Security",
             ],
             languages: ["Dart"],
-            repoUrl: "https://github.com/LordNydorf/Pennora",
+            repoUrl: "https://github.com/LordNydorf/Pennora"
+            ,
             categories: ["Mobile Apps"]
         },
         {
@@ -348,7 +350,8 @@ export const resume: SiteConfig = {
                 "Enabling CSV Export and Excel Import.",
             ],
             languages: ["Python", "CustomTkinter", "SQLite", "MySQL"],
-            repoUrl: "https://github.com/duckcommit/Report-Card-Generator",
+            repoUrl: "https://github.com/duckcommit/Report-Card-Generator"
+            ,
             categories: ["AI & Systems"]
         },
     ],

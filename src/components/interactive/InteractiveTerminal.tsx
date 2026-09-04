@@ -39,6 +39,14 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
         if (isOpen) {
             bottomRef.current?.scrollIntoView({ behavior: "smooth" });
             inputRef.current?.focus();
+
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") {
+                    setIsOpen(false);
+                }
+            };
+            window.addEventListener("keydown", handleKeyDown);
+            return () => window.removeEventListener("keydown", handleKeyDown);
         }
     }, [history, isOpen]);
 
@@ -184,6 +192,9 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Developer CLI Terminal"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -197,9 +208,20 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
                         {/* Terminal Header Bar */}
                         <div className="flex items-center justify-between px-4 py-3 bg-white/[0.04] border-b border-white/10 select-none">
                             <div className="flex items-center gap-2">
-                                <span className="w-3 h-3 rounded-full bg-red-500/80 cursor-pointer" onClick={() => setIsOpen(false)} />
-                                <span className="w-3 h-3 rounded-full bg-yellow-500/80 cursor-pointer" onClick={() => setIsMaximized(!isMaximized)} />
-                                <span className="w-3 h-3 rounded-full bg-green-500/80 cursor-pointer" />
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    aria-label="Close terminal"
+                                    className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors"
+                                />
+                                <button
+                                    onClick={() => setIsMaximized(!isMaximized)}
+                                    aria-label="Toggle terminal maximize"
+                                    className="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors"
+                                />
+                                <button
+                                    aria-label="Terminal status indicator"
+                                    className="w-3 h-3 rounded-full bg-green-500/80 cursor-default"
+                                />
                                 <span className="ml-2 text-xs font-mono font-semibold text-white/70 flex items-center gap-1.5">
                                     <TerminalIcon className="w-3.5 h-3.5 text-primary" />
                                     rohit@portfolio: ~
@@ -209,12 +231,14 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
                             <div className="flex items-center gap-1 text-white/60">
                                 <button
                                     onClick={() => setIsMaximized(!isMaximized)}
+                                    aria-label={isMaximized ? "Minimize terminal" : "Maximize terminal"}
                                     className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors"
                                 >
                                     {isMaximized ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
                                 </button>
                                 <button
                                     onClick={() => setIsOpen(false)}
+                                    aria-label="Close terminal"
                                     className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors"
                                 >
                                     <X className="w-3.5 h-3.5" />
@@ -252,6 +276,7 @@ export function InteractiveTerminal({ onAtmosphereChange, onNavigate }: Interact
                             />
                             <button
                                 type="submit"
+                                aria-label="Execute command"
                                 className="p-1.5 rounded-lg bg-primary/20 text-primary hover:bg-primary hover:text-white transition-colors"
                             >
                                 <CornerDownLeft className="w-3.5 h-3.5" />

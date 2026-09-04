@@ -111,7 +111,11 @@ export function About() {
                         <p>I'm <span className="text-foreground font-semibold tracking-tight">{resume.name}</span>, a {resume.role} based in {resume.location}.</p>
                         <p>
                             {resume.bio[0]}{" "}
-                            <span className="text-primary font-mono font-bold inline-block whitespace-nowrap min-w-[14ch] drop-shadow-sm">
+                            <span
+                                aria-live="polite"
+                                aria-atomic="true"
+                                className="text-primary font-mono font-bold inline-block whitespace-nowrap min-w-[14ch] drop-shadow-sm"
+                            >
                                 {typeText}
                             </span>
                         </p>
@@ -229,6 +233,7 @@ export function About() {
                         <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-4">
                             <button
                                 onClick={() => setActiveCategory("all")}
+                                aria-pressed={activeCategory === "all"}
                                 className={cn(
                                     "px-2.5 py-1 rounded-xl text-xs font-mono font-semibold transition-all whitespace-nowrap",
                                     activeCategory === "all"
@@ -245,6 +250,7 @@ export function About() {
                                     <button
                                         key={cat.id}
                                         onClick={() => setActiveCategory(cat.id)}
+                                        aria-pressed={isSelected}
                                         className={cn(
                                             "px-2.5 py-1 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex items-center gap-1.5",
                                             isSelected

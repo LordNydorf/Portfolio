@@ -1,5 +1,4 @@
-// src/components/layout/FloatingNavbar.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,16 @@ export function FloatingNavbar({
     onAtmosphereChange
 }: FloatingNavbarProps) {
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    useEffect(() => {
+        if (mobileOpen) {
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") setMobileOpen(false);
+            };
+            window.addEventListener("keydown", handleKeyDown);
+            return () => window.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [mobileOpen]);
 
     const handleItemClick = (id: string) => {
         onNavigate(id);
@@ -137,40 +146,55 @@ export function FloatingNavbar({
                         size="icon"
                         className="h-8 w-8 rounded-xl border border-black/10 dark:border-white/10"
                         onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
                     >
                         {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
                     </Button>
                 </div>
             </header>
 
-            {/* Mobile Dropdown Drawer */}
+            {/* Mobile Dropdown Drawer & Backdrop */}
             <AnimatePresence>
                 {mobileOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.2 }}
-                        className="md:hidden fixed top-16 inset-x-3 z-40 p-4 rounded-2xl bg-background/95 dark:bg-[#0c0c10]/95 backdrop-blur-2xl border border-black/10 dark:border-white/10 shadow-2xl space-y-3"
-                    >
-                        <div className="grid gap-1">
-                            {NAV_ITEMS.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => handleItemClick(item.id)}
-                                    className={cn(
-                                        "flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-colors",
-                                        activeSection === item.id
-                                            ? "bg-primary/10 text-primary font-semibold border border-primary/20"
-                                            : "text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                    )}
-                                >
-                                    <span>{item.label}</span>
-                                    <ArrowUpRight className="w-4 h-4 opacity-50" />
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={() => setMobileOpen(false)}
+                            className="md:hidden fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
+                            aria-hidden="true"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.2 }}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label="Mobile Navigation Menu"
+                            className="md:hidden fixed top-16 inset-x-3 z-40 p-4 rounded-2xl bg-background/95 dark:bg-[#0c0c10]/95 backdrop-blur-2xl border border-black/10 dark:border-white/10 shadow-2xl space-y-3"
+                        >
+                            <div className="grid gap-1">
+                                {NAV_ITEMS.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => handleItemClick(item.id)}
+                                        className={cn(
+                                            "flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-colors",
+                                            activeSection === item.id
+                                                ? "bg-primary/10 text-primary font-semibold border border-primary/20"
+                                                : "text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
+                                        )}
+                                    >
+                                        <span>{item.label}</span>
+                                        <ArrowUpRight className="w-4 h-4 opacity-50" />
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
         </>

@@ -4,8 +4,7 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from "@/compone
 import { Carousel, CarouselContent, CarouselItem, CarouselDots } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ProjectCard3D } from "@/components/interactive";
-import { Magnet, DecryptedText, BorderBeam } from "@/components/effects";
+import { SpotlightCard, Magnet, DecryptedText, BorderBeam } from "@/components/effects";
 import { languageHsl } from "@/lib/colours";
 import { ArrowUpRight, Github, Globe, X, Filter } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -35,22 +34,34 @@ function ProjectTextContent({ project }: { project: Project }) {
                 <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider mb-3">Technologies</h4>
                 <div className="flex flex-wrap gap-2">
                     {project.languages.map((lang) => (
-                        <Badge key={lang} variant="secondary" style={{ backgroundColor: `hsl(${languageHsl[lang] || '0 0% 20%'} / 0.2)`, color: `hsl(${languageHsl[lang] || '0 0% 80%'})` }} className="border border-white/5 hover:bg-white/10">
+                        <Badge
+                            key={lang}
+                            variant="secondary"
+                            style={{
+                                backgroundColor: `hsl(${languageHsl[lang] || '0 0% 20%'} / 0.15)`,
+                                color: `hsl(${languageHsl[lang] || '0 0% 80%'})`
+                            }}
+                            className="border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10"
+                        >
                             {lang}
                         </Badge>
                     ))}
                 </div>
             </div>
-            <div className="flex gap-3 pt-4 mt-4 border-t border-white/10">
+            <div className="flex gap-3 pt-4 mt-4 border-t border-black/10 dark:border-white/10">
                 {project.repoUrl && (
-                    <a href={project.repoUrl} target="_blank" rel="noreferrer" className="flex-1">
-                        <Button className="w-full gap-2" variant="outline"><Github className="w-4 h-4" /> Code</Button>
-                    </a>
+                    <Button asChild className="flex-1 gap-2" variant="outline">
+                        <a href={project.repoUrl} target="_blank" rel="noreferrer">
+                            <Github className="w-4 h-4" /> Code
+                        </a>
+                    </Button>
                 )}
                 {project.demoUrl && (
-                    <a href={project.demoUrl} target="_blank" rel="noreferrer" className="flex-1">
-                        <Button className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-0"><Globe className="w-4 h-4" />  Check it out </Button>
-                    </a>
+                    <Button asChild className="flex-1 gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-0">
+                        <a href={project.demoUrl} target="_blank" rel="noreferrer">
+                            <Globe className="w-4 h-4" /> Check it out
+                        </a>
+                    </Button>
                 )}
             </div>
         </div>
@@ -156,7 +167,7 @@ export function Portfolio() {
     };
 
     return (
-        <section id="portfolio" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6 relative">
+        <section id="portfolio" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6 relative section-optimize">
             <header className="flex flex-col gap-4 mb-8 sm:mb-10 border-b border-black/10 dark:border-white/10 pb-6 animate-fade-up">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -165,7 +176,6 @@ export function Portfolio() {
                         </h2>
                     </div>
 
-                    {/* Interactive Filter Bar */}
                     <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 relative overflow-x-auto hide-scrollbar max-w-full w-full sm:w-auto">
                         <Filter className="w-3.5 h-3.5 ml-2 mr-1 text-muted-foreground shrink-0 hidden sm:inline-block" />
                         {CATEGORIES.map((cat) => {
@@ -174,6 +184,8 @@ export function Portfolio() {
                                 <button
                                     key={cat}
                                     onClick={() => handleSelectCategory(cat)}
+                                    aria-label={`Filter by ${cat}`}
+                                    aria-pressed={isActive}
                                     className={cn(
                                         "relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap z-10 shrink-0",
                                         isActive ? "text-primary dark:text-white font-semibold" : "text-muted-foreground hover:text-foreground"
@@ -192,51 +204,52 @@ export function Portfolio() {
                         })}
                     </div>
                 </div>
-                <p className="text-muted-foreground text-sm sm:text-base">Showing {filteredProjects.length} of {projects.length} featured engineering projects.</p>
             </header>
 
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <AnimatePresence mode="popLayout">
-                    {filteredProjects.map((project, idx) => (
-                        <motion.div
-                            key={project.title}
-                            layout
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.25 }}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                {filteredProjects.map((project) => (
+                    <motion.div
+                        key={project.title}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.4 }}
+                        className="h-full"
+                    >
+                        <SpotlightCard
+                            enableTilt={true}
+                            tiltIntensity={6}
+                            className="group h-full flex flex-col justify-between overflow-hidden cursor-pointer"
+                            onMouseEnter={() => setHoveredCard(project.title)}
+                            onMouseLeave={() => setHoveredCard(null)}
                         >
-                            <ProjectCard3D
-                                onMouseEnter={() => setHoveredCard(project.title)}
-                                onMouseLeave={() => setHoveredCard(null)}
-                                data-cursor="view"
-                                data-cursor-text="VIEW ↗"
-                                className="group flex flex-col h-full relative"
-                                style={{ animationDelay: `${idx * 80}ms` }}
-                            >
+                            <div className="flex flex-col h-full">
                                 {hoveredCard === project.title && (
                                     <BorderBeam size={180} duration={6} borderWidth={1.5} colorFrom="hsl(var(--primary))" colorTo="#ffffff" />
                                 )}
 
                                 <div className="relative aspect-video overflow-hidden border-b border-black/5 dark:border-white/5 bg-black/[0.04] dark:bg-black/30 cursor-pointer flex items-center justify-center" data-cursor="view" data-cursor-text="VIEW ↗" onClick={() => handleCardClick(project.title)}>
-                                    {/* Ambient blurred backdrop for seamless edge-to-edge glow */}
                                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
                                         <img
                                             src={getAssetUrl(project.images[0])}
                                             alt=""
                                             aria-hidden="true"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-full h-full object-cover blur-2xl scale-125 opacity-30 dark:opacity-40 select-none"
                                         />
                                         <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
                                     </div>
 
-                                    {/* Clean, fully-contained foreground image that never gets cropped */}
                                     <div className="relative z-10 w-full h-full p-4 sm:p-6 flex items-center justify-center">
                                         {!isMobile ? (
                                             <motion.img
                                                 layoutId={isFirefox ? undefined : `img-${project.title}`}
                                                 src={getAssetUrl(project.images[0])}
                                                 alt={project.title}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className={cn(
                                                     "max-w-full max-h-full object-contain rounded-xl drop-shadow-md select-none",
                                                     selectedId === project.title ? "opacity-0" : "opacity-100"
@@ -248,12 +261,13 @@ export function Portfolio() {
                                             <img
                                                 src={getAssetUrl(project.images[0])}
                                                 alt={project.title}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="max-w-full max-h-full object-contain rounded-xl drop-shadow-md transition-transform duration-500 ease-out group-hover:scale-104 select-none"
                                             />
                                         )}
                                     </div>
 
-                                    {/* Tech stack badges */}
                                     <div className="absolute bottom-3.5 left-3.5 right-3.5 z-20 flex flex-wrap gap-1.5 pointer-events-none">
                                         {project.techStack.slice(0, 3).map((tech) => (
                                             <div key={tech} className="px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-lg bg-black/80 dark:bg-black/90 backdrop-blur-md border border-white/10 text-white/90 shadow-sm">{tech}</div>
@@ -288,18 +302,33 @@ export function Portfolio() {
                                         </div>
                                     </div>
                                 </div>
-                            </ProjectCard3D>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
-            </motion.div>
+                            </div>
+                        </SpotlightCard>
+                    </motion.div>
+                ))}
+            </div>
 
             <AnimatePresence>
                 {selectedId && selectedProject && !isMobile && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 pointer-events-none">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" onClick={() => setSelectedId(null)} />
-                        <motion.div className="relative w-full max-w-5xl bg-background/95 dark:bg-[#0a0a0c]/95 border border-black/10 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:grid md:grid-cols-[1.2fr,1fr] max-h-[85vh] pointer-events-auto" initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} transition={{ duration: 0.3, ease: "easeOut" }}>
-                            <button onClick={() => setSelectedId(null)} className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/10 dark:bg-black/50 text-foreground dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition-colors"><X className="w-5 h-5" /></button>
+                        <motion.div
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="project-modal-title"
+                            className="relative w-full max-w-5xl bg-background/95 dark:bg-[#0a0a0c]/95 border border-black/10 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:grid md:grid-cols-[1.2fr,1fr] max-h-[85vh] pointer-events-auto"
+                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                            <button
+                                onClick={() => setSelectedId(null)}
+                                aria-label="Close project details"
+                                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/10 dark:bg-black/50 text-foreground dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                             <div className="bg-black/[0.03] dark:bg-black/40 p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-black/10 dark:border-white/10 h-[300px] md:h-auto relative overflow-hidden">
                                 <Carousel className="w-full max-w-md relative z-10">
                                     <CarouselContent>
@@ -328,7 +357,7 @@ export function Portfolio() {
                             <div className="p-8 overflow-y-auto hide-scrollbar bg-background/20">
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                                     <div className="mb-6">
-                                        <h2 className="text-3xl font-bold mb-2 text-foreground">{selectedProject.title}</h2>
+                                        <h2 id="project-modal-title" className="text-3xl font-bold mb-2 text-foreground">{selectedProject.title}</h2>
                                         <p className="flex items-center gap-2 text-primary font-medium">{selectedProject.scope} &middot; {selectedProject.timeline}</p>
                                     </div>
                                     <ProjectTextContent project={selectedProject} />

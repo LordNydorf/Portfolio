@@ -19,12 +19,33 @@ export function VariableProximity({
     const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: -1000, y: -1000 });
 
     useEffect(() => {
+        let rafId: number | null = null;
+
         const handleMouseMove = (e: MouseEvent) => {
             if (!containerRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            setMousePos({
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
+
+            if (rafId !== null) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                if (!containerRef.current) return;
+                const rect = containerRef.current.getBoundingClientRect();
+
+                // Proximity boundary check to avoid math when cursor is far away
+                const maxRange = radius * 2;
+                if (
+                    e.clientX < rect.left - maxRange ||
+                    e.clientX > rect.right + maxRange ||
+                    e.clientY < rect.top - maxRange ||
+                    e.clientY > rect.bottom + maxRange
+                ) {
+                    setMousePos({ x: -1000, y: -1000 });
+                    return;
+                }
+
+                setMousePos({
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top
+                });
             });
         };
 
@@ -39,30 +60,38 @@ export function VariableProximity({
         }
 
         return () => {
+            if (rafId !== null) cancelAnimationFrame(rafId);
             window.removeEventListener("mousemove", handleMouseMove);
             if (element) element.removeEventListener("mouseleave", handleMouseLeave);
         };
-    }, []);
+    }, [radius]);
 
     const words = label.split(" ");
 
     return (
-        <span ref={containerRef} className={cn("inline-flex flex-wrap gap-x-2.5", className)}>
-            {words.map((word, wordIdx) => (
-                <span key={wordIdx} className="inline-flex">
-                    {word.split("").map((letter, letterIdx) => {
-                        return (
-                            <LetterSpan
-                                key={`${wordIdx}-${letterIdx}`}
-                                char={letter}
-                                mousePos={mousePos}
-                                radius={radius}
-                                falloff={falloff}
-                            />
-                        );
-                    })}
-                </span>
-            ))}
+        <span
+            ref={containerRef}
+            className={cn("inline-flex flex-wrap gap-x-2.5", className)}
+            aria-label={label}
+        >
+            <span className="sr-only">{label}</span>
+            <span aria-hidden="true" className="inline-flex flex-wrap gap-x-2.5">
+                {words.map((word, wordIdx) => (
+                    <span key={wordIdx} className="inline-flex">
+                        {word.split("").map((letter, letterIdx) => {
+                            return (
+                                <LetterSpan
+                                    key={`${wordIdx}-${letterIdx}`}
+                                    char={letter}
+                                    mousePos={mousePos}
+                                    radius={radius}
+                                    falloff={falloff}
+                                />
+                            );
+                        })}
+                    </span>
+                ))}
+            </span>
         </span>
     );
 }
@@ -85,7 +114,7 @@ function LetterSpan({
     useEffect(() => {
         if (!spanRef.current) return;
         const rect = spanRef.current.getBoundingClientRect();
-        const parentRect = spanRef.current.parentElement?.parentElement?.getBoundingClientRect();
+        const parentRect = spanRef.current.parentElement?.parentElement?.parentElement?.getBoundingClientRect();
         if (!parentRect) return;
 
         const letterCenterX = rect.left - parentRect.left + rect.width / 2;

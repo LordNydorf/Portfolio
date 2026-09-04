@@ -31,8 +31,8 @@ export function AtmosphereSwitcher({
                     <PopoverTrigger asChild>
                         <button
                             className={cn(
-                                "relative rounded-xl flex items-center justify-center gap-2 border transition-all duration-300 select-none",
-                                variant === "compact" ? "h-10 w-10" : "h-10 px-3",
+                                "relative flex items-center justify-center gap-2 border transition-all duration-300 select-none",
+                                variant === "compact" ? "h-7 w-7 rounded-full" : "h-8 px-3 rounded-full",
                                 "bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10",
                                 "border-black/10 dark:border-white/10",
                                 "text-foreground/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",

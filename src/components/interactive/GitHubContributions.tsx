@@ -432,16 +432,16 @@ export function GitHubContributions() {
                 </div>
             </div>
 
-            {/* Main Authentic GitHub Calendar Card Frame (Dark Canvas) */}
+            {/* Main Authentic GitHub Calendar Card Frame (Dual-Theme Canvas) */}
             <div
                 ref={cardInnerRef}
-                className="rounded-2xl bg-[#090d13] border border-white/10 p-4 sm:p-6 relative"
+                className="rounded-2xl bg-black/[0.03] dark:bg-[#090d13] border border-black/10 dark:border-white/10 p-4 sm:p-6 relative transition-colors"
             >
                 {/* Authentic Header: Live Readout on Tap/Hover + Year Filter Pills */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
                     <div className="min-h-[28px] flex items-center">
                         {loading ? (
-                            <h4 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">
+                            <h4 className="text-base sm:text-lg font-semibold text-foreground dark:text-zinc-100 tracking-tight">
                                 Fetching live GitHub activity...
                             </h4>
                         ) : activeDayInfo ? (
@@ -450,30 +450,31 @@ export function GitHubContributions() {
                                     className={cn(
                                         "w-2.5 h-2.5 rounded-full shrink-0",
                                         activeDayInfo.day.count > 0
-                                            ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"
-                                            : "bg-zinc-600"
+                                            ? "bg-emerald-500 dark:bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                                            : "bg-zinc-400 dark:bg-zinc-600"
                                     )}
                                 />
-                                <span className="text-base sm:text-lg font-bold text-emerald-400">
+                                <span className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400">
                                     {activeDayInfo.day.count === 0
                                         ? "No contributions"
                                         : `${activeDayInfo.day.count} ${activeDayInfo.day.count === 1 ? "contribution" : "contributions"}`}
                                 </span>
-                                <span className="text-xs sm:text-sm text-zinc-400">
+                                <span className="text-xs sm:text-sm text-muted-foreground dark:text-zinc-400">
                                     on {formatDate(activeDayInfo.day.date)}
                                 </span>
                                 {selectedDay && (
                                     <button
                                         onClick={() => setSelectedDay(null)}
-                                        className="p-1 rounded-md hover:bg-white/10 text-zinc-400 hover:text-zinc-200 transition-colors ml-1"
+                                        className="p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors ml-1"
                                         title="Clear selection"
+                                        aria-label="Clear date selection"
                                     >
                                         <X className="w-3.5 h-3.5" />
                                     </button>
                                 )}
                             </div>
                         ) : (
-                            <h4 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">
+                            <h4 className="text-base sm:text-lg font-semibold text-foreground dark:text-zinc-100 tracking-tight">
                                 {headlineTotal}
                             </h4>
                         )}
@@ -488,11 +489,12 @@ export function GitHubContributions() {
                                 <button
                                     key={yr}
                                     onClick={() => setSelectedYear(yr)}
+                                    aria-label={`Filter by ${label}`}
                                     className={cn(
                                         "px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-all whitespace-nowrap",
                                         isSelected
                                             ? "bg-emerald-500 text-black font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]"
-                                            : "text-zinc-400 hover:text-zinc-200 hover:bg-white/5"
+                                            : "text-muted-foreground dark:text-zinc-400 hover:text-foreground dark:hover:text-zinc-200 hover:bg-black/5 dark:hover:bg-white/5"
                                     )}
                                 >
                                     {label}
@@ -522,7 +524,7 @@ export function GitHubContributions() {
                                             {Array.from({ length: 7 }).map((_, row) => (
                                                 <div
                                                     key={row}
-                                                    className="w-full aspect-square rounded-[2px] sm:rounded-[3px] bg-white/[0.06]"
+                                                    className="w-full aspect-square rounded-[2px] sm:rounded-[3px] bg-black/[0.06] dark:bg-white/[0.06]"
                                                 />
                                             ))}
                                         </div>
@@ -534,7 +536,7 @@ export function GitHubContributions() {
                         /* Error State with Retry Button */
                         <div className="py-12 flex flex-col items-center justify-center text-center space-y-3">
                             <Info className="w-8 h-8 text-rose-400" />
-                            <div className="text-sm font-semibold text-zinc-200">{error}</div>
+                            <div className="text-sm font-semibold text-foreground dark:text-zinc-200">{error}</div>
                             <Button
                                 size="sm"
                                 variant="outline"
@@ -553,7 +555,7 @@ export function GitHubContributions() {
                                 <div className="w-5 sm:w-6 shrink-0" />
 
                                 {/* 53-Column Month Labels Header */}
-                                <div className="grid grid-cols-[repeat(53,minmax(0,1fr))] gap-[3px] sm:gap-1 w-full text-[11px] font-mono text-zinc-400 h-4">
+                                <div className="grid grid-cols-[repeat(53,minmax(0,1fr))] gap-[3px] sm:gap-1 w-full text-[11px] font-mono text-muted-foreground dark:text-zinc-400 h-4">
                                     {columns.map((_, colIdx) => {
                                         const match = monthLabels.find(m => m.index === colIdx);
                                         return (
@@ -571,7 +573,7 @@ export function GitHubContributions() {
                             {/* Heatmap Body: Left Day Labels + 53 Week Columns */}
                             <div className="flex items-stretch gap-2 w-full">
                                 {/* Weekday Labels (Mon, Wed, Fri aligned exactly to rows 1, 3, 5) */}
-                                <div className="grid grid-rows-7 gap-[3px] sm:gap-1 text-[10px] font-mono text-zinc-400 select-none w-5 sm:w-6 text-left shrink-0">
+                                <div className="grid grid-rows-7 gap-[3px] sm:gap-1 text-[10px] font-mono text-muted-foreground dark:text-zinc-400 select-none w-5 sm:w-6 text-left shrink-0">
                                     <span className="flex items-center" />
                                     <span className="flex items-center">Mon</span>
                                     <span className="flex items-center" />
@@ -602,9 +604,10 @@ export function GitHubContributions() {
                                                     <div
                                                         key={day.date}
                                                         role="button"
-                                                        tabIndex={0}
+                                                        tabIndex={-1}
                                                         data-cursor="pointer"
                                                         title={tooltipText}
+                                                        aria-label={tooltipText}
                                                         onMouseEnter={(e) => {
                                                             const pos = getRelativePosition(e.currentTarget);
                                                             setHoveredDay({ day, ...pos });
@@ -641,12 +644,12 @@ export function GitHubContributions() {
                 </div>
 
                 {/* Footer Bar: Documentation Link + Less/More Legend */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-2 border-t border-white/10 text-xs text-zinc-400">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-2 border-t border-black/10 dark:border-white/10 text-xs text-muted-foreground dark:text-zinc-400">
                     <a
                         href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile"
                         target="_blank"
                         rel="noreferrer"
-                        className="hover:text-zinc-200 transition-colors text-[11px] underline-offset-4 hover:underline"
+                        className="hover:text-foreground dark:hover:text-zinc-200 transition-colors text-[11px] underline-offset-4 hover:underline"
                     >
                         Learn how we count contributions
                     </a>

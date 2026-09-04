@@ -42,9 +42,12 @@ export function PullCordTheme() {
         const nextTheme = isDark ? "light" : "dark";
         setTheme(nextTheme);
 
-        // Flashbang effect
-        setFlash(true);
-        setTimeout(() => setFlash(false), 300);
+        // Flashbang effect only if user hasn't requested reduced motion
+        const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!prefersReducedMotion) {
+            setFlash(true);
+            setTimeout(() => setFlash(false), 300);
+        }
 
         // Select funny quote
         const quotesList = nextTheme === "light" ? LIGHT_QUOTES : DARK_QUOTES;
@@ -178,6 +181,19 @@ export function PullCordTheme() {
 
                 {/* The Pullable Light Bulb / Brass Ring */}
                 <motion.div
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Switch to ${isDark ? "light" : "dark"} theme (Pull cord)`}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            pullY.set(50);
+                            setTimeout(() => {
+                                pullY.set(0);
+                                triggerSwitch();
+                            }, 120);
+                        }
+                    }}
                     onMouseDown={onMouseDown}
                     onTouchStart={onTouchStart}
                     onClick={() => {
@@ -193,7 +209,7 @@ export function PullCordTheme() {
                     }}
                     whileHover={{ scale: 1.15 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`cursor-grab active:cursor-grabbing relative p-2 sm:p-2.5 rounded-full border transition-shadow touch-none ${
+                    className={`cursor-grab active:cursor-grabbing relative p-2 sm:p-2.5 rounded-full border transition-shadow touch-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                         isDark
                             ? "bg-[#161622] border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.3)]"
                             : "bg-amber-100 border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.6)]"
@@ -210,7 +226,7 @@ export function PullCordTheme() {
                     </div>
 
                     {/* Pull Me Tooltip Tag */}
-                    <div className="absolute top-1/2 -left-20 -translate-y-1/2 px-2 py-0.5 rounded-md bg-black/80 dark:bg-white/90 text-white dark:text-black text-[9px] font-mono font-bold tracking-wider opacity-0 hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg hidden sm:block">
+                    <div className="absolute top-1/2 -left-20 -translate-y-1/2 px-2 py-0.5 rounded-md bg-black/80 dark:bg-white/90 text-white dark:text-black text-[9px] font-mono font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg hidden sm:block">
                         YANK CORD ↓
                     </div>
                 </motion.div>

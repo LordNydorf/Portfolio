@@ -1,5 +1,5 @@
 // src/components/effects/SpotlightCard.tsx
-import { useRef, useState, useCallback, HTMLAttributes, ReactNode, MouseEvent } from "react";
+import { useRef, useCallback, HTMLAttributes, ReactNode, MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface SpotlightCardProps extends HTMLAttributes<HTMLDivElement> {
@@ -16,46 +16,48 @@ export function SpotlightCard({
     spotlightColor = "rgba(239, 68, 68, 0.12)",
     enableTilt = false,
     tiltIntensity = 10,
+    style,
     ...props
 }: SpotlightCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
-    const [tiltStyle, setTiltStyle] = useState<{ transform: string; transition: string }>({
-        transform: "perspective(1000px) rotateX(0deg) rotateY(0deg)",
-        transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
-    });
+    const rafIdRef = useRef<number | null>(null);
 
     const handleMouseMove = useCallback(
         (e: MouseEvent<HTMLDivElement>) => {
-            if (!cardRef.current) return;
-            const rect = cardRef.current.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const clientX = e.clientX;
+            const clientY = e.clientY;
 
-            cardRef.current.style.setProperty("--mouse-x", `${x}px`);
-            cardRef.current.style.setProperty("--mouse-y", `${y}px`);
-            cardRef.current.style.setProperty("--spotlight-color", spotlightColor);
+            if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
 
-            if (enableTilt) {
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -tiltIntensity;
-                const rotateY = ((x - centerX) / centerX) * tiltIntensity;
+            rafIdRef.current = requestAnimationFrame(() => {
+                if (!cardRef.current) return;
+                const rect = cardRef.current.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
 
-                setTiltStyle({
-                    transform: `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`,
-                    transition: "transform 0.1s ease-out"
-                });
-            }
+                cardRef.current.style.setProperty("--mouse-x", `${x}px`);
+                cardRef.current.style.setProperty("--mouse-y", `${y}px`);
+                cardRef.current.style.setProperty("--spotlight-color", spotlightColor);
+
+                if (enableTilt) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -tiltIntensity;
+                    const rotateY = ((x - centerX) / centerX) * tiltIntensity;
+
+                    cardRef.current.style.transition = "transform 0.1s ease-out";
+                    cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+                }
+            });
         },
         [spotlightColor, enableTilt, tiltIntensity]
     );
 
     const handleMouseLeave = useCallback(() => {
-        if (enableTilt) {
-            setTiltStyle({
-                transform: "perspective(1000px) rotateX(0deg) rotateY(0deg)",
-                transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
-            });
+        if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+        if (enableTilt && cardRef.current) {
+            cardRef.current.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+            cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
         }
     }, [enableTilt]);
 
@@ -64,7 +66,7 @@ export function SpotlightCard({
             ref={cardRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={enableTilt ? tiltStyle : undefined}
+            style={style}
             className={cn(
                 "relative rounded-2xl overflow-hidden",
                 "bg-card/70 dark:bg-[#0c0c0e]/80",

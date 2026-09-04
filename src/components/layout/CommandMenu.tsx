@@ -8,7 +8,6 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator,
-    CommandShortcut,
 } from "@/components/ui/command";
 import {
     LayoutDashboard,
@@ -58,19 +57,19 @@ export function CommandMenu({ onNavigate }: CommandMenuProps) {
 
                 <CommandGroup heading="Navigation">
                     <CommandItem value="about" onSelect={() => runCommand(() => onNavigate("about"))}>
-                        <User className="mr-2 h-4 w-4" /> About Me <CommandShortcut>⌘A</CommandShortcut>
+                        <User className="mr-2 h-4 w-4" /> About Me
                     </CommandItem>
                     <CommandItem value="github activity commits contributions" onSelect={() => runCommand(() => onNavigate("about"))}>
-                        <Activity className="mr-2 h-4 w-4 text-emerald-500" /> GitHub Activity <CommandShortcut>⌘G</CommandShortcut>
+                        <Activity className="mr-2 h-4 w-4 text-emerald-500" /> GitHub Activity
                     </CommandItem>
                     <CommandItem value="portfolio" onSelect={() => runCommand(() => onNavigate("portfolio"))}>
-                        <LayoutDashboard className="mr-2 h-4 w-4" /> Portfolio <CommandShortcut>⌘P</CommandShortcut>
+                        <LayoutDashboard className="mr-2 h-4 w-4" /> Portfolio
                     </CommandItem>
                     <CommandItem value="experience" onSelect={() => runCommand(() => onNavigate("experience"))}>
-                        <Briefcase className="mr-2 h-4 w-4" /> Experience <CommandShortcut>⌘E</CommandShortcut>
+                        <Briefcase className="mr-2 h-4 w-4" /> Experience
                     </CommandItem>
                     <CommandItem value="contact" onSelect={() => runCommand(() => onNavigate("contact"))}>
-                        <Mail className="mr-2 h-4 w-4" /> Contact <CommandShortcut>⌘C</CommandShortcut>
+                        <Mail className="mr-2 h-4 w-4" /> Contact
                     </CommandItem>
                 </CommandGroup>
                 <CommandSeparator />
@@ -93,7 +92,6 @@ export function CommandMenu({ onNavigate }: CommandMenuProps) {
                                 <Moon className="mr-2 h-4 w-4 text-amber-400" /> Switch to Dark Theme
                             </>
                         )}
-                        <CommandShortcut>⌘T</CommandShortcut>
                     </CommandItem>
                 </CommandGroup>
                 <CommandSeparator />

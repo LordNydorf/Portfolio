@@ -66,6 +66,31 @@ export default defineConfig(({ mode }) => {
                 },
             },
         ].filter(Boolean),
+        build: {
+            target: "esnext",
+            cssCodeSplit: true,
+            chunkSizeWarningLimit: 600,
+            rollupOptions: {
+                output: {
+                    manualChunks(id) {
+                        if (id.includes("node_modules")) {
+                            if (id.includes("framer-motion")) {
+                                return "vendor-motion";
+                            }
+                            if (id.includes("@radix-ui") || id.includes("cmdk") || id.includes("vaul") || id.includes("@hookform") || id.includes("react-day-picker")) {
+                                return "vendor-ui";
+                            }
+                            if (id.includes("lucide-react")) {
+                                return "vendor-icons";
+                            }
+                            if (id.includes("recharts") || id.includes("d3-")) {
+                                return "vendor-charts";
+                            }
+                        }
+                    }
+                }
+            }
+        },
         resolve: {
             alias: {
                 "@": path.resolve(__dirname, "./src"),

@@ -55,11 +55,37 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
         let isDragging = false;
         let lastMouseX = 0;
         let lastMouseY = 0;
+        let animId: number;
+        let isIntersecting = true;
+        let isVisible = !document.hidden;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isIntersecting = entry.isIntersecting;
+                if (isIntersecting && isVisible) {
+                    animId = requestAnimationFrame(render);
+                }
+            },
+            { threshold: 0.1 }
+        );
+        observer.observe(canvas);
+
+        const handleVisibilityChange = () => {
+            isVisible = !document.hidden;
+            if (isVisible && isIntersecting) {
+                animId = requestAnimationFrame(render);
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
 
         const handleStart = (clientX: number, clientY: number) => {
             isDragging = true;
             lastMouseX = clientX;
             lastMouseY = clientY;
+            window.addEventListener("mousemove", onMouseMove, { passive: true });
+            window.addEventListener("mouseup", onMouseUp);
+            window.addEventListener("touchmove", onTouchMove, { passive: true });
+            window.addEventListener("touchend", onTouchEnd);
         };
 
         const handleMove = (clientX: number, clientY: number) => {
@@ -79,6 +105,10 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
 
         const handleEnd = () => {
             isDragging = false;
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", onMouseUp);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
         };
 
         const onMouseDown = (e: MouseEvent) => handleStart(e.clientX, e.clientY);
@@ -100,16 +130,10 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
         const onTouchEnd = () => handleEnd();
 
         canvas.addEventListener("mousedown", onMouseDown);
-        window.addEventListener("mousemove", onMouseMove, { passive: true });
-        window.addEventListener("mouseup", onMouseUp);
-
         canvas.addEventListener("touchstart", onTouchStart, { passive: true });
-        window.addEventListener("touchmove", onTouchMove, { passive: true });
-        window.addEventListener("touchend", onTouchEnd);
-
-        let animId: number;
 
         const render = () => {
+            if (!isIntersecting || !isVisible) return;
             ctx.clearRect(0, 0, size, size);
 
             if (!isDragging) {
@@ -169,20 +193,26 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
                 }
             }
 
-            // Draw glowing points
+            // Draw glowing points (High speed direct fill without blur)
             for (const p of projectedPoints) {
                 const alpha = Math.max(0.1, (p.z + radius) / (radius * 2));
                 const pointSize = Math.max(1, p.scale * 2.8);
 
+                // Soft glow ring
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, pointSize * 1.8, 0, Math.PI * 2);
+                ctx.fillStyle = isDark
+                    ? `rgba(239, 68, 68, ${alpha * 0.3})`
+                    : `rgba(225, 29, 72, ${alpha * 0.25})`;
+                ctx.fill();
+
+                // Center sharp node
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, pointSize, 0, Math.PI * 2);
                 ctx.fillStyle = isDark
-                    ? `rgba(244, 63, 94, ${alpha * 0.9})`
-                    : `rgba(225, 29, 72, ${alpha * 0.9})`;
-                ctx.shadowBlur = isDark ? 8 : 4;
-                ctx.shadowColor = isDark ? "#ef4444" : "#e11d48";
+                    ? `rgba(244, 63, 94, ${alpha * 0.95})`
+                    : `rgba(225, 29, 72, ${alpha * 0.95})`;
                 ctx.fill();
-                ctx.shadowBlur = 0;
             }
 
             animId = requestAnimationFrame(render);
@@ -192,11 +222,12 @@ export function HologramSphere({ size = 220 }: { size?: number }) {
 
         return () => {
             cancelAnimationFrame(animId);
+            observer.disconnect();
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
             canvas.removeEventListener("mousedown", onMouseDown);
+            canvas.removeEventListener("touchstart", onTouchStart);
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("mouseup", onMouseUp);
-
-            canvas.removeEventListener("touchstart", onTouchStart);
             window.removeEventListener("touchmove", onTouchMove);
             window.removeEventListener("touchend", onTouchEnd);
         };

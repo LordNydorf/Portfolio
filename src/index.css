@@ -72,6 +72,19 @@
 @layer base {
     * { @apply border-border; }
 
+    :focus-visible {
+        outline: 2px solid hsl(var(--primary));
+        outline-offset: 2px;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
     body {
         @apply text-foreground bg-background;
         min-height: 100vh;
@@ -296,5 +309,17 @@
     }
     .marquee-container:hover .marquee-track {
         animation-play-state: paused;
+    }
+
+    /* Rendering & Scroll Performance Virtualization */
+    .section-optimize {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 900px;
+    }
+
+    .gpu-accelerate {
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+        will-change: transform;
     }
 }

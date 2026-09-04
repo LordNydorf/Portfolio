@@ -22,7 +22,7 @@ export function Experience() {
     );
 
     return (
-        <section id="experience" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6">
+        <section id="experience" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6 section-optimize">
             {/* Header with Decrypted Matrix Typography */}
             <header className="mb-10 sm:mb-14 animate-fade-up flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
@@ -43,6 +43,7 @@ export function Experience() {
                 <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 overflow-x-auto hide-scrollbar max-w-full w-full sm:w-auto self-start md:self-auto">
                     <button
                         onClick={() => setActiveBranch("all")}
+                        aria-pressed={activeBranch === "all"}
                         className={cn(
                             "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "all"
@@ -56,6 +57,7 @@ export function Experience() {
 
                     <button
                         onClick={() => setActiveBranch("work")}
+                        aria-pressed={activeBranch === "work"}
                         className={cn(
                             "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "work"
@@ -69,6 +71,7 @@ export function Experience() {
 
                     <button
                         onClick={() => setActiveBranch("education")}
+                        aria-pressed={activeBranch === "education"}
                         className={cn(
                             "px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0",
                             activeBranch === "education"
@@ -151,6 +154,8 @@ export function Experience() {
                                                 <img
                                                     src={getAssetUrl(job.logo)}
                                                     alt={job.company}
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (

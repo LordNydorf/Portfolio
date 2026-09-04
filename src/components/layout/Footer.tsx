@@ -1,5 +1,4 @@
-// src/components/layout/Footer.tsx
-import { ArrowUp, Github, Linkedin, Instagram, Mail } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { Magnet } from "@/components/effects";
 import { resume } from "@/data/resume";
 
@@ -19,53 +18,24 @@ export function Footer() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Magnet padding={20} magnetStrength={3}>
-                        <a
-                            href="https://github.com/lordnydorf"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-primary/40 hover:text-primary transition-all bg-black/5 dark:bg-white/5 block"
-                            aria-label="GitHub"
-                        >
-                            <Github className="w-4 h-4" />
-                        </a>
-                    </Magnet>
+                    {resume.contact.socials.map((social) => {
+                        const Icon = social.icon;
+                        const isExternal = !social.url.startsWith("mailto:");
+                        return (
+                            <Magnet key={social.name} padding={20} magnetStrength={3}>
+                                <a
+                                    href={social.url}
+                                    {...(isExternal ? { target: "_blank", rel: "noreferrer" } : {})}
+                                    className="p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-primary/40 hover:text-primary transition-all bg-black/5 dark:bg-white/5 block"
+                                    aria-label={social.name}
+                                >
+                                    <Icon className="w-4 h-4" />
+                                </a>
+                            </Magnet>
+                        );
+                    })}
 
-                    <Magnet padding={20} magnetStrength={3}>
-                        <a
-                            href="https://www.linkedin.com/in/rohit-krishnan-633a43250/"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-primary/40 hover:text-primary transition-all bg-black/5 dark:bg-white/5 block"
-                            aria-label="LinkedIn"
-                        >
-                            <Linkedin className="w-4 h-4" />
-                        </a>
-                    </Magnet>
-
-                    <Magnet padding={20} magnetStrength={3}>
-                        <a
-                            href="https://www.instagram.com/i_.rohit._i/"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-primary/40 hover:text-primary transition-all bg-black/5 dark:bg-white/5 block"
-                            aria-label="Instagram"
-                        >
-                            <Instagram className="w-4 h-4" />
-                        </a>
-                    </Magnet>
-
-                    <Magnet padding={20} magnetStrength={3}>
-                        <a
-                            href={`mailto:${resume.email}`}
-                            className="p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-primary/40 hover:text-primary transition-all bg-black/5 dark:bg-white/5 block"
-                            aria-label="Email"
-                        >
-                            <Mail className="w-4 h-4" />
-                        </a>
-                    </Magnet>
-
-                    <div className="h-5 w-px bg-black/10 dark:border-white/10 mx-1" />
+                    <div className="h-5 w-px bg-black/10 dark:bg-white/10 mx-1" />
 
                     <Magnet padding={20} magnetStrength={3}>
                         <button

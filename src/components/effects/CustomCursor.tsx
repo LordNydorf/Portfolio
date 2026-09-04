@@ -22,8 +22,11 @@ export function CustomCursor() {
     const haloY = useSpring(mouseY, springConfig);
 
     useEffect(() => {
-        // Detect touch device
-        if (window.matchMedia("(pointer: coarse)").matches) {
+        // Detect touch device or reduced motion preference
+        if (
+            window.matchMedia("(pointer: coarse)").matches ||
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ) {
             setIsTouch(true);
             return;
         }
